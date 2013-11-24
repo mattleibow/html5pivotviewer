@@ -393,7 +393,7 @@
                 facets[i + 1] = "<h3><a href='#' title=" + PivotCollection.FacetCategories[i].Name + ">";
                 facets[i + 1] += PivotCollection.FacetCategories[i].Name;
                 facets[i + 1] += "</a><div class='pv-filterpanel-accordion-heading-clear' facetType='" + PivotCollection.FacetCategories[i].Type + "'>&nbsp;</div></h3>";
-                facets[i + 1] += "<div style='height:30%' id='pv-cat-" + CleanName(PivotCollection.FacetCategories[i].Name) + "'>";
+                facets[i + 1] += "<div id='pv-cat-" + CleanName(PivotCollection.FacetCategories[i].Name) + "'>";
 
                 //Create facet controls
                 if (PivotCollection.FacetCategories[i].Type == PivotViewer.Models.FacetType.DateTime ) {
@@ -426,6 +426,8 @@
 	// Minus an extra 25 to leave room for the version number to be added underneath
         $(".pv-filterpanel-accordion").css('height', ($(".pv-filterpanel").height() - $(".pv-filterpanel-search").height() - 75) + "px");
         $(".pv-filterpanel-accordion").accordion({
+            heightStyle: "content",
+            collapsible: true
         });
         $('.pv-toolbarpanel-sortcontrols').append('<select class="pv-toolbarpanel-sort">' + sort.join('') + '</select>');
 
