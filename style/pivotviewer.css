@@ -8,7 +8,9 @@
     font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
     font-size: 8pt;
     font-weight: normal;
+    -webkit-tap-highlight-color: #000000;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+    position: relative;
 }
 
 .pv-loading {
@@ -30,15 +32,18 @@
     }
 
 .pv-toolbarpanel {
-    height: 22px;
+    height: 30px;
     width: 100%;
     border-bottom: 1px solid #D3D4D4;
-    padding: 3px 0px 3px 0px;
+    padding: 3px 0px;
     background: #FDFDFD;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FDFDFD', endColorstr='#F4F4F4');
     background: -webkit-gradient(linear, left top, left bottom, from(#FDFDFD), to(#F4F4F4));
     background: -moz-linear-gradient(top, #FDFDFD, #F4F4F4);
     white-space: nowrap;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .pv-toolbarpanel-brandimage {
@@ -52,6 +57,9 @@
     float: left;
     white-space: nowrap;
     overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 }
 
@@ -112,47 +120,62 @@
 }
 
 .pv-mainpanel {
-    height: 659px;
+    left: 0px;
+    top: 30px;
+    right: 0px;
+    bottom: 0px;
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .pv-filterpanel {
     position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     z-index: 30;
-    margin-left: 5px;
-    margin-top: 5px;
-    width: 183px;
-    padding: 0px 3px 0px 3px;
+    left: 5px;
+    top: 5px;
+    bottom: 5px;
+    position: absolute;
+    width: 200px;
+    padding: 3px;
     background: #FEFEFE;
     border: 1px solid #C5C5C5;
     -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
     border-radius: 3px;
     -moz-box-shadow: 0 0 2px 2px #D7D9DA;
     -webkit-box-shadow: 0 0 2px 2px #D7D9DA;
+    -ms-box-shadow: 0 0 2px 2px #D7D9DA;
     box-shadow: 0 0 2px 2px #D7D9DA;
 }
 
 .pv-filterpanel-version {
-    color: #E2E2E2;
+    left: 3px;
+    bottom: 3px;
+    color: rgb(226, 226, 226);
+    line-height: 24px;
     font-size: 8pt;
-    float: left;
-    height: 24px;
-    width: 180px;
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 4px 4px 4px 4px;
+    position: absolute;
 }
 
 .pv-filterpanel-clearall {
-    width: 56px;
-    margin-top: 3px;
-    padding: 4px 4px 4px 4px;
-    float: right;
+    background-position: right;
+    height: 22px;
+    text-align: right;
+    color: rgb(151, 168, 178);
+    line-height: 22px;
+    padding-right: 14px;
     cursor: pointer;
-    color: #97A8B2;
-    background-image: url('../images/FilterPanelClear.png');
-    background-position: right center;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-image: url("../images/FilterPanelClear.png");
     background-repeat: no-repeat;
-    visibility:: hidden;
+    float: right;
 }
 
     .pv-filterpanel-clearall:hover {
@@ -160,10 +183,12 @@
     }
 
 .pv-filterpanel-search {
-    margin-top: 9px;
-    margin-bottom: 0px;
+    border: 1px solid rgb(226, 226, 226);
+    border-image: none;
     height: 24px;
-    border: 1px solid #E2E2E2;
+    margin-top: 3px;
+    box-sizing: border-box;
+    width: 100%;
 }
 
     .pv-filterpanel-search::-webkit-input-placeholder {
@@ -180,15 +205,21 @@
     }
 
 .pv-filterpanel-search-autocomplete {
+    padding: 3px;
+    border: 1px solid rgb(226, 226, 226);
+    -webkit-border-image: none;
+    -moz-border-image: none;
+    -ms-border-image: none;
+    -o-border-image: none;
+    border-image: none;
     height: 150px;
-    overflow-y: scroll;
-    overflow-x: hidden;
     position: absolute;
     z-index: 10;
-    background-color: #FFF;
-    border: 1px solid #E2E2E2;
-    margin-right: 3px;
-    padding: 3px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgb(255, 255, 255);
+    left: 3px;
+    right: 3px;
 }
 
     .pv-filterpanel-search-autocomplete span {
@@ -268,25 +299,26 @@
 .pv-modal-dialog {
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
-    top: 10000;
-    right: 10000;
-    bottom: 10000;
-    left: 10000;
     z-index: 99999;
+    -ms-opacity: 0;
     opacity: 0;
     pointer-events: none;
 }
 
     .pv-modal-dialog:target {
+        -ms-opacity: 1;
         opacity: 1;
         -webkit-transition: opacity 400ms ease-in;
         -moz-transition: opacity 400ms ease-in;
+        -ms-transition: opacity 400ms ease-in;
+        -o-transition: opacity 400ms ease-in;
         transition: opacity 400ms ease-in;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
         pointer-events: auto;
+        background: #000000;
         background: rgba(0,0,0,0.8);
     }
 
@@ -295,6 +327,7 @@
         position: relative;
         margin: 10% auto;
         padding: 5px 20px 13px 20px;
+        -ms-border-radius: 10px;
         border-radius: 10px;
         background: #fff;
         background: -moz-linear-gradient(#fff, #999);
@@ -316,9 +349,11 @@
     font-weight: bold;
     -webkit-border-radius: 12px;
     -moz-border-radius: 12px;
+    -ms-border-radius: 12px;
     border-radius: 12px;
     -moz-box-shadow: 1px 1px 3px #000;
     -webkit-box-shadow: 1px 1px 3px #000;
+    -ms-box-shadow: 1px 1px 3px #000;
     box-shadow: 1px 1px 3px #000;
 }
 
@@ -327,7 +362,7 @@
     }
 
 .pv-viewpanel {
-    position: absolute;
+    height: 100%;
 }
 
 .pv-viewpanel-view {
@@ -340,28 +375,39 @@
 }
 
 .pv-filterpanel-accordion {
-    overflow-y: auto;
+    left: 3px;
+    top: 55px;
+    right: 3px;
+    bottom: 30px;
+    position: absolute;
     overflow-x: hidden;
-    margin-top: 6px;
+    overflow-y: auto;
 }
 
 .pv-infopanel {
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
     position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     z-index: 30;
-    width: 182px;
-    margin-top: 5px;
-    padding: 8px 8px 8px 8px;
+    width: 200px;
+    padding: 8px;
     background: #FEFEFE;
     border: 1px solid #C5C5C5;
     -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
     border-radius: 3px;
     -moz-box-shadow: 0 0 2px 2px #D7D9DA;
     -webkit-box-shadow: 0 0 2px 2px #D7D9DA;
+    -ms-box-shadow: 0 0 2px 2px #D7D9DA;
     box-shadow: 0 0 2px 2px #D7D9DA;
 }
 
 .pv-infopanel-controls {
-    margin-bottom: 7px;
+    margin-bottom: 8px;
     float: left;
     clear: both;
 }
@@ -412,16 +458,24 @@
     font-size: 12pt;
     float: left;
     clear: both;
+    -moz-word-break: break-all;
+    -o-word-break: break-all;
+    -ms-word-break: break-all;
     word-break: break-all;
 }
 
 .pv-infopanel-details {
-    margin-top: 15px;
-    float: left;
+    left: 8px;
+    top: 80px;
+    right: 8px;
+    bottom: 8px;
     clear: both;
-    width: 181px;
-    overflow-y: auto;
+    position: absolute;
     overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .pv-infopanel-detail-description {
@@ -446,22 +500,35 @@
     padding: 4px 3px 4px 3px;
 }
 
+.pv-infopanel-footer {
+    position: absolute;
+    bottom: 8px;
+}
+
 .pv-infopanel-related {
     color: #E2E2E2;
     font-size: 8pt;
-    float: left;
+    /*float: left;
     clear: both;
     position: relative;
-    bottom: 0;
+    bottom: 0;*/
 }
+
+    .pv-infopanel-related a {
+        display: block;
+    }
 
 .pv-infopanel-copyright {
     color: #E2E2E2;
     font-size: 8pt;
-    float: left;
+    /*float: left;
     clear: both;
     position: absolute;
-    bottom: 0;
+    bottom: 8px;*/
+}
+
+.pv-infopanel-related + .pv-infopanel-copyright {
+    margin-top: 8px;
 }
 
 .detail-dark {
@@ -530,6 +597,9 @@
     border: 1px solid #D3D4D4;
     cursor: default;
     overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
     white-space: nowrap;
     z-index: 25;
@@ -635,7 +705,6 @@
  */
 /* IE/Win - Fix animation bug - #4615 */
 .ui-accordion {
-    width: 100%;
 }
 
     .ui-accordion .ui-accordion-header {
@@ -664,6 +733,9 @@
         font-size: 1em;
         padding: .5em .5em .5em .7em;
         overflow: hidden;
+        -moz-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
         text-overflow: ellipsis;
         font-weight: normal;
     }
@@ -674,6 +746,9 @@
     width: 80%;
     white-space: nowrap;
     overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 }
 

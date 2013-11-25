@@ -130,6 +130,43 @@
         },
         hide: function () {
             Debug.Log('Hide');
+        },
+        resize: function () {
+            ResizeView(true);
+        }
+    };
+
+    ResizeView = function (animate) {
+        // size the floating panes
+        ResizeView.FilterPanel();
+        ResizeView.InfoPanel();
+        // size the canvas
+        var canvas = $(".pv-viewarea-canvas")[0];
+        canvas.width = _self.width();
+        canvas.height = $('.pv-viewpanel').height();
+        if (animate) {
+            FilterCollection(false);
+        }
+    };
+    ResizeView.FilterPanel = function() {
+        ResizeView.verticalCenter(".pv-filterpanel", ".pv-filterpanel-search", ".pv-filterpanel-version", ".pv-filterpanel-accordion", 3);
+    };
+    ResizeView.InfoPanel = function () {
+        ResizeView.verticalCenter(".pv-infopanel", ".pv-infopanel-heading", ".pv-infopanel-footer", ".pv-infopanel-details", 8);
+    };
+    ResizeView.verticalCenter = function (insideThis, belowThis, aboveThis, stretchThis, spacing) {
+        var container = $(insideThis);
+        var stretch = $(stretchThis);
+        var top = $(belowThis);
+        var bottom = $(aboveThis);
+        // stretch
+        if (container.length > 0 && stretch.length > 0) {
+            var topBottom = (top.length > 0 ? (top.position().top + top.outerHeight(true)) : 0) + spacing;
+            var bottomTop = (bottom.length > 0 ? (container.innerHeight() - bottom.position().top) : 0) + spacing;
+            stretch.css({
+                top: topBottom + 'px',
+                bottom: bottomTop + 'px'
+            });
         }
     };
 
@@ -239,10 +276,8 @@
 
         //main panel
         _self.append("<div class='pv-mainpanel'></div>");
-        var mainPanelHeight = $('.pv-wrapper').height() - $('.pv-toolbarpanel').height() - 6;
-        $('.pv-mainpanel').css('height', mainPanelHeight + 'px');
         $('.pv-mainpanel').append("<div class='pv-filterpanel'></div>");
-        $('.pv-mainpanel').append("<div class='pv-viewpanel'><canvas class='pv-viewarea-canvas' width='" + _self.width() + "' height='" + mainPanelHeight + "px'></canvas></div>");
+        $('.pv-mainpanel').append("<div class='pv-viewpanel'><canvas class='pv-viewarea-canvas'></canvas></div>");
         $('.pv-mainpanel').append("<div class='pv-infopanel'></div>");
  
         //add grid for tableview to the mainpanel
@@ -253,35 +288,30 @@
 
         //filter panel
         var filterPanel = $('.pv-filterpanel');
-        filterPanel.append("<div class='pv-filterpanel-clearall'>Clear All</div>")
-            .append("<input class='pv-filterpanel-search' type='text' placeholder='Search...' /><div class='pv-filterpanel-search-autocomplete'></div>")
-            .css('height', mainPanelHeight - 13 + 'px');
-        if (navigator.userAgent.match(/iPad/i) != null)
-            $('.pv-filterpanel-search').css('width', filterPanel.width() - 10 + 'px');
-        else
-            $('.pv-filterpanel-search').css('width', filterPanel.width() - 2 + 'px');
-        $('.pv-filterpanel-search-autocomplete')
-            .css('width', filterPanel.width() - 8 + 'px')
-            .hide();
-        //view panel
-        //$('.pv-viewpanel').css('left', $('.pv-filterpanel').width() + 28 + 'px');
+        filterPanel
+            .append("<div class='pv-filterpanel-clearall'>Clear All</div>")
+            .append("<input class='pv-filterpanel-search' type='text' placeholder='Search...' /><div class='pv-filterpanel-search-autocomplete'></div>");
+        $('.pv-filterpanel-search-autocomplete').hide();
+
         //info panel
         var infoPanel = $('.pv-infopanel');
-        infoPanel.css('left', (($('.pv-mainpanel').offset().left + $('.pv-mainpanel').width()) - 205) + 'px')
-            .css('height', mainPanelHeight - 28 + 'px');
         infoPanel.append("<div class='pv-infopanel-controls'></div>");
         $('.pv-infopanel-controls').append("<div><div class='pv-infopanel-controls-navleft'></div><div class='pv-infopanel-controls-navleftdisabled'></div><div class='pv-infopanel-controls-navbar'></div><div class='pv-infopanel-controls-navright'></div><div class='pv-infopanel-controls-navrightdisabled'></div></div>");
         $('.pv-infopanel-controls-navleftdisabled').hide();
         $('.pv-infopanel-controls-navrightdisabled').hide();
         infoPanel.append("<div class='pv-infopanel-heading'></div>");
         infoPanel.append("<div class='pv-infopanel-details'></div>");
+        var infoPanelFooter = $("<div class='pv-infopanel-footer'></div>");
         if (PivotCollection.MaxRelatedLinks > 0) {
-            infoPanel.append("<div class='pv-infopanel-related'></div>");
+            infoPanelFooter.append("<div class='pv-infopanel-related'></div>");
         }
         if (PivotCollection.CopyrightName != "") {
-            infoPanel.append("<div class='pv-infopanel-copyright'><a href=\"" + PivotCollection.CopyrightHref + "\" target=\"_blank\">" + PivotCollection.CopyrightName + "</a></div>");
+            infoPanelFooter.append("<div class='pv-infopanel-copyright'><a href=\"" + PivotCollection.CopyrightHref + "\" target=\"_blank\">" + PivotCollection.CopyrightName + "</a></div>");
         }
+        infoPanel.append(infoPanelFooter);
         infoPanel.hide();
+
+        ResizeView();
     };
 
     //Creates facet list for the filter panel
@@ -424,7 +454,6 @@
                 SortFacetItems(PivotCollection.FacetCategories[i].Name);
         }
 	// Minus an extra 25 to leave room for the version number to be added underneath
-        $(".pv-filterpanel-accordion").css('height', ($(".pv-filterpanel").height() - $(".pv-filterpanel-search").height() - 75) + "px");
         $(".pv-filterpanel-accordion").accordion({
             heightStyle: "content",
             collapsible: true
@@ -521,8 +550,12 @@
     CreateViews = function () {
 
         var viewPanel = $('.pv-viewpanel');
-        var width = _self.width();
-        var height = $('.pv-mainpanel').height();
+        var getWidth = function () {
+            return _self.width();
+        };
+        var getHeight = function () {
+            return $('.pv-mainpanel').height();
+        };
         var offsetX = $('.pv-filterpanel').width() + 18;
         var offsetY = 4;
 
@@ -536,7 +569,7 @@
         for (var i = 0; i < _views.length; i++) {
             try {
                 if (_views[i] instanceof PivotViewer.Views.IPivotViewerView) {
-                    _views[i].Setup(width, height, offsetX, offsetY, _tileController.GetMaxTileRatio());
+                    _views[i].Setup(getWidth, getHeight, offsetX, offsetY, _tileController.GetMaxTileRatio());
                     viewPanel.append("<div class='pv-viewpanel-view' id='pv-viewpanel-view-" + i + "'>" + _views[i].GetUI() + "</div>");
                     $('.pv-toolbarpanel-viewcontrols').append("<div class='pv-toolbarpanel-view' id='pv-toolbarpanel-view-" + i + "' title='" + _views[i].GetViewName() + "'><img id='pv-viewpanel-view-" + i + "-image' src='" + _views[i].GetButtonImage() + "' alt='" + _views[i].GetViewName() + "' /></div>");
                 } else {
@@ -1285,12 +1318,12 @@
             if (selectedItem.Links.length > 0) {
                 $('.pv-infopanel-related').empty();
                 for (var k = 0; k < selectedItem.Links.length; k++) {
-                    $('.pv-infopanel-related').append("<a href='" + selectedItem.Links[k].Href + "'>" + selectedItem.Links[k].Name + "</a><br>");
+                    $('.pv-infopanel-related').append("<a href='" + selectedItem.Links[k].Href + "'>" + selectedItem.Links[k].Name + "</a>");
                 }
             }
             infopanelDetails.append(detailDOM.join(''));
             $('.pv-infopanel').fadeIn();
-            infopanelDetails.css('height', ($('.pv-infopanel').height() - ($('.pv-infopanel-controls').height() + $('.pv-infopanel-heading').height() + $('.pv-infopanel-copyright').height() + $('.pv-infopanel-related').height()) - 20) + 'px');
+            ResizeView.InfoPanel();
             _selectedItem = selectedItem;
             _selectedItemBkt = evt.bkt;
 

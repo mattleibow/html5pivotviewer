@@ -14,6 +14,7 @@
     <link href="lib/jquery.tooltipster/tooltipster.css" rel="stylesheet" />
     <script src="lib/jquery.tooltipster/jquery.tooltipster.min.js"></script>
     <script src="lib/jquery.mousewheel/jquery.mousewheel.min.js"></script>
+    <script src="lib/jquery.resizeend/jQuery.resizeEnd.js"></script>
     <script src="lib/easing/easing.js"></script>
     <script src="lib/colResizable/colResizable-1.3.min.js"></script>
 
@@ -36,15 +37,28 @@
     <script src="src/views/LoadImageSetHelper.js"></script>
     <script src="src/views/mapview.js"></script>
     <script src="src/views/tableview.js"></script>
-
+    
+    <style>
+        html, body, div {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-    <div id="pivotviewer" style="width: 1024px; height: 800px;"></div>
+    <div id="pivotviewer" style="margin-top: 25px; margin-left:25px; width: 800px; height: 600px;"></div>
     <script type="text/javascript">
         var debug = false;
         $(document).ready(function () {
+
+            $("#pivotviewer").outerHeight($(window).height() - 50).outerWidth($(window).width() - 50);
             $('#pivotviewer').PivotViewer({
                 Loader: new PivotViewer.Models.Loaders.CXMLLoader("http://localhost:55555/api/deepzoomtiles/coverscollection.cxml")
+            });
+
+            $(window).resizeEnd(function () {
+                $("#pivotviewer").outerHeight($(window).height() - 50).outerWidth($(window).width() - 50);
+                $("#pivotviewer").PivotViewer('resize');
             });
         });
     </script>
