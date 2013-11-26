@@ -16,6 +16,22 @@
 
 ///PivotViewer jQuery extension
 (function ($) {
+
+    PivotViewer.PivotViewerViewport = PivotViewer.IPivotViewerViewport.subClass({
+        GetViewportWidth: function () {
+            return _self.width();
+        },
+        GetViewportHeight: function () {
+            return $('.pv-mainpanel').height();
+        },
+        GetOffsetX: function () {
+            return $('.pv-filterpanel').width() + 18;
+        },
+        GetOffsetY: function () {
+            return 4;
+        }
+    });
+
     var _views = [],
         _facetItemTotals = [], //used to store the counts of all the string facets - used when resetting the filters
         _facetNumericItemTotals = [], //used to store the counts of all the numeric facets - used when resetting the filters
@@ -47,7 +63,8 @@
         _nameMapping = {},
         _googleAPILoaded = false,
         _googleAPIKey,
-        PivotCollection = new PivotViewer.Models.Collection();
+        PivotCollection = new PivotViewer.Models.Collection(),
+        _viewport = new PivotViewer.PivotViewerViewport();
 
     var methods = {
         init: function (options) {
@@ -131,7 +148,7 @@
         hide: function () {
             Debug.Log('Hide');
         },
-        resize: function () {
+        refresh: function () {
             ResizeView(true);
         }
     };
@@ -550,14 +567,6 @@
     CreateViews = function () {
 
         var viewPanel = $('.pv-viewpanel');
-        var getWidth = function () {
-            return _self.width();
-        };
-        var getHeight = function () {
-            return $('.pv-mainpanel').height();
-        };
-        var offsetX = $('.pv-filterpanel').width() + 18;
-        var offsetY = 4;
 
         //Create instances of all the views
         _views.push(new PivotViewer.Views.GridView());
@@ -569,7 +578,7 @@
         for (var i = 0; i < _views.length; i++) {
             try {
                 if (_views[i] instanceof PivotViewer.Views.IPivotViewerView) {
-                    _views[i].Setup(getWidth, getHeight, offsetX, offsetY, _tileController.GetMaxTileRatio());
+                    _views[i].Setup(_viewport, _tileController.GetMaxTileRatio());
                     viewPanel.append("<div class='pv-viewpanel-view' id='pv-viewpanel-view-" + i + "'>" + _views[i].GetUI() + "</div>");
                     $('.pv-toolbarpanel-viewcontrols').append("<div class='pv-toolbarpanel-view' id='pv-toolbarpanel-view-" + i + "' title='" + _views[i].GetViewName() + "'><img id='pv-viewpanel-view-" + i + "-image' src='" + _views[i].GetButtonImage() + "' alt='" + _views[i].GetViewName() + "' /></div>");
                 } else {

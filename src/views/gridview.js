@@ -85,17 +85,17 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
             if (that.Scale == NaN)
                 that.Scale = 1;
 
-            var newWidth = (that.getWidth() - that.offsetX) * that.Scale;
-            var newHeight = (that.getHeight() - that.offsetY) * that.Scale;
+            var newWidth = (that.viewport.GetViewportWidth() - that.viewport.GetOffsetX()) * that.Scale;
+            var newHeight = (that.viewport.GetViewportHeight() - that.viewport.GetOffsetY()) * that.Scale;
 
 
 
             //if trying to zoom out too far, reset to min
-            if (newWidth < that.getWidth() || that.Scale == 1) {
-                that.currentOffsetX = that.offsetX;
-                that.currentOffsetY = that.offsetY;
-                that.currentWidth = that.getWidth();
-                that.currentHeight = that.getHeight();
+            if (newWidth < that.viewport.GetViewportWidth() || that.Scale == 1) {
+                that.currentOffsetX = that.viewport.GetOffsetX();
+                that.currentOffsetY = that.viewport.GetOffsetY();
+                that.currentWidth = that.viewport.GetViewportWidth();
+                that.currentHeight = that.viewport.GetViewportHeight();
                 that.Scale = 1;
                 // Reset the slider to zero 
                 that.dontZoom = true;
@@ -112,7 +112,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                 that.currentHeight = newHeight;
             }
 
-            var rowscols = that.GetRowsAndColumns(that.currentWidth - that.offsetX, that.currentHeight - that.offsetY, that.maxRatio, that.currentFilter.length);
+            var rowscols = that.GetRowsAndColumns(that.currentWidth - that.viewport.GetOffsetX(), that.currentHeight - that.viewport.GetOffsetY(), that.maxRatio, that.currentFilter.length);
             that.SetVisibleTilePositions(rowscols, that.currentFilter, that.currentOffsetX, that.currentOffsetY, true, true, zoomTime);
 
             //deselect tiles if zooming back to min size
@@ -136,31 +136,31 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
             that.currentOffsetY += dragY;
 
             //LHS bounds check
-            if (dragX > 0 && that.currentOffsetX > that.offsetX) {
+            if (dragX > 0 && that.currentOffsetX > that.viewport.GetOffsetX()) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
             //Top bounds check
-            if (dragY > 0 && that.currentOffsetY > that.offsetY) {
+            if (dragY > 0 && that.currentOffsetY > that.viewport.GetOffsetY()) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
             //RHS bounds check
             //if the current offset is smaller than the default offset and the zoom scale == 1 then stop drag
-            if (that.currentOffsetX < that.offsetX && that.currentWidth == that.getWidth()) {
+            if (that.currentOffsetX < that.viewport.GetOffsetX() && that.currentWidth == that.viewport.GetViewportWidth()) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
-            if (dragX < 0 && (that.currentOffsetX) < -1 * (that.currentWidth - that.getWidth())) {
+            if (dragX < 0 && (that.currentOffsetX) < -1 * (that.currentWidth - that.viewport.GetViewportWidth())) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
             //bottom bounds check
-            if (that.currentOffsetY < that.offsetY && that.currentHeight == that.getHeight()) {
+            if (that.currentOffsetY < that.viewport.GetOffsetY() && that.currentHeight == that.viewport.GetViewportHeight()) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
-            if (dragY < 0 && (that.currentOffsetY - that.offsetY) < -1 * (that.currentHeight - that.getHeight())) {
+            if (dragY < 0 && (that.currentOffsetY - that.viewport.GetOffsetY()) < -1 * (that.currentHeight - that.viewport.GetViewportHeight())) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
@@ -175,16 +175,14 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                 that.OffsetTiles(dragX, dragY);
         });
     },
-    Setup: function (getWidth, getHeight, offsetX, offsetY, tileMaxRatio) {
-        this.getWidth = getWidth;
-        this.getHeight = getHeight;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+    Setup: function (viewport, tileMaxRatio) {
+        // (viewport instanceof PivotViewer.Views.IPivotViewerView)
+        this.viewport = viewport;
         this.maxRatio = tileMaxRatio;
-        this.currentWidth = this.getWidth();
-        this.currentHeight = this.getHeight();
-        this.currentOffsetX = this.offsetX;
-        this.currentOffsetY = this.offsetY;
+        this.currentWidth = this.viewport.GetViewportWidth();
+        this.currentHeight = this.viewport.GetViewportHeight();
+        this.currentOffsetX = this.viewport.GetOffsetX();
+        this.currentOffsetY = this.viewport.GetOffsetY();
     },
     Filter: function (dzTiles, currentFilter, sortFacet, stringFacets, changingView, changeViewSelectedItem) {
         var that = this;
@@ -222,7 +220,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
 
         this.tiles = dzTiles;
         if (this.init) {
-            this.SetInitialTiles(this.tiles, this.getWidth(), this.getHeight());
+            this.SetInitialTiles(this.tiles, this.viewport.GetViewportWidth(), this.viewport.GetViewportHeight());
         }
 
         // Clear all the multiple images that are used in the grid view
@@ -245,16 +243,16 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
         if (!changingFromNonTileView || (changeViewSelectedItem == "")) {
             var pt1Timeout = 0;
             //zoom out first
-            Debug.Log("this.currentWidth: " + this.currentWidth + " this.width: " + this.getWidth());
+            Debug.Log("this.currentWidth: " + this.currentWidth + " this.width: " + this.viewport.GetViewportWidth());
               var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
               if (value > 0) { 
                 this.selected = selectedItem = "";
                 //zoom out
-                this.currentOffsetX = this.offsetX;
-                this.currentOffsetY = this.offsetY;
+                this.currentOffsetX = this.viewport.GetOffsetX();
+                this.currentOffsetY = this.viewport.GetOffsetY();
                 // Zoom using the slider event
                 $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 1);
-                var rowscols = this.GetRowsAndColumns(this.currentWidth - this.offsetX, this.currentHeight - this.offsetY, this.maxRatio, this.tiles.length);
+                var rowscols = this.GetRowsAndColumns(this.currentWidth - this.viewport.GetOffsetX(), this.currentHeight - this.viewport.GetOffsetY(), this.maxRatio, this.tiles.length);
                 var clearFilter = [];
                 for (var i = 0; i < this.tiles.length; i++) {
                     this.tiles[i].origwidth = rowscols.TileHeight / this.tiles[i]._controller.GetRatio(this.tiles[i].facetItem.Img);
@@ -276,7 +274,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                     var filterindex = $.inArray(that.tiles[i].facetItem.Id, currentFilter);
                     //set outer location for all tiles not in the filter
                     if (filterindex < 0) {
-                        that.SetOuterTileDestination(that.getWidth(), that.getHeight(), that.tiles[i]);
+                        that.SetOuterTileDestination(that.viewport.GetViewportWidth(), that.viewport.GetViewportHeight(), that.tiles[i]);
                         that.tiles[i].start = PivotViewer.Utils.Now();
                         that.tiles[i].end = that.tiles[i].start + 1000;
                     }
@@ -295,12 +293,12 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                 var pt2Timeout = currentFilter.length == that.tiles.length ? 0 : 500;
                 //Delay pt2 animation
                 setTimeout(function () {
-                    var rowscols = that.GetRowsAndColumns(that.getWidth() - that.offsetX, that.getHeight() - that.offsetY, that.maxRatio, that.currentFilter.length);
+                    var rowscols = that.GetRowsAndColumns(that.viewport.GetViewportWidth() - that.viewport.GetOffsetX(), that.viewport.GetViewportHeight() - that.viewport.GetOffsetY(), that.maxRatio, that.currentFilter.length);
                     for (var i = 0; i < that.tiles.length; i++) {
                         that.tiles[i].origwidth = rowscols.TileHeight / that.tiles[i]._controller.GetRatio(that.tiles[i].facetItem.Img);
                         that.tiles[i].origheight = rowscols.TileHeight;
                     }
-                    that.SetVisibleTilePositions(rowscols, that.currentFilter, that.offsetX, that.offsetY, false, false, 1000);
+                    that.SetVisibleTilePositions(rowscols, that.currentFilter, that.viewport.GetOffsetX(), that.viewport.GetOffsetY(), false, false, 1000);
                 }, pt2Timeout);
  
             }, pt1Timeout);
@@ -379,10 +377,10 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                 break;
             }
         }
-        var rowscols = that.GetRowsAndColumns(that.currentWidth - that.offsetX, that.currentHeight - that.offsetY, that.maxRatio, that.currentFilter.length);
+        var rowscols = that.GetRowsAndColumns(that.currentWidth - that.viewport.GetOffsetX(), that.currentHeight - that.viewport.GetOffsetY(), that.maxRatio, that.currentFilter.length);
 
-        that.currentOffsetX = ((rowscols.TileMaxWidth * selectedCol) * -1) + (that.getWidth() / 2) - (rowscols.TileMaxWidth / 2);
-        that.currentOffsetY = ((rowscols.TileHeight * selectedRow) * -1) + (that.getHeight() / 2) - (rowscols.TileHeight / 2);
+        that.currentOffsetX = ((rowscols.TileMaxWidth * selectedCol) * -1) + (that.viewport.GetViewportWidth() / 2) - (rowscols.TileMaxWidth / 2);
+        that.currentOffsetY = ((rowscols.TileHeight * selectedRow) * -1) + (that.viewport.GetViewportHeight() / 2) - (rowscols.TileHeight / 2);
         that.SetVisibleTilePositions(rowscols, that.currentFilter, that.currentOffsetX, that.currentOffsetY, true, true, 1000);
     },
     handleSelection: function (selectedItem, selectedTile) {
@@ -440,8 +438,8 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
         } else {
             that.selected = selectedItem = "";
             //zoom out
-            that.currentOffsetX = that.offsetX;
-            that.currentOffsetY = that.offsetY;
+            that.currentOffsetX = that.viewport.GetOffsetX();
+            that.currentOffsetY = that.viewport.GetOffsetY();
             // Zoom using the slider event
             var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
             value = 0;

@@ -24,6 +24,7 @@
     <script src="src/utils.js"></script>
     <script src="src/collectionloader.js"></script>
     <script src="src/models.js"></script>
+    <script src="src/ipivotviewerviewport.js"></script>
     <script src="src/pivotviewer.js"></script>
     <!-- src/views -->
     <script src="src/views/ipivotviewerview.js"></script>
@@ -58,7 +59,7 @@
 
             $(window).resizeEnd(function () {
                 $("#pivotviewer").outerHeight($(window).height() - 50).outerWidth($(window).width() - 50);
-                $("#pivotviewer").PivotViewer('resize');
+                $("#pivotviewer").PivotViewer('refresh');
             });
         });
     </script>
