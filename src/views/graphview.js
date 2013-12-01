@@ -24,7 +24,8 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
         this.buckets = [];
         this.Scale = 1;
         this.canvasHeightUIAdjusted = 0;
-        this.titleSpace = 62;
+        this.titleSpace = 50;
+        this.spacing = 2;
         this.dontZoom = false;
 
         //Event Handlers
@@ -96,41 +97,43 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
             if (that.Scale == NaN)
                 that.Scale = 1;
 
-            var newWidth = (that.width - that.offsetX) * that.Scale;
-            var newHeight = that.height * that.Scale;
+            var minWidth = that.viewport.GetViewportWidth() - that.viewport.GetOffsetX();
+            var minHeight = that.viewport.GetViewportHeight() - that.viewport.GetOffsetY();
+            var newWidth = minWidth * that.Scale;
+            var newHeight = minHeight * that.Scale;
 
             //if trying to zoom out too far, reset to min
-            if (newWidth < that.width || that.Scale == 1) {
-                that.currentOffsetX = that.offsetX;
-                that.currentOffsetY = that.offsetY;
-                that.currentWidth = that.width;
-                that.currentHeight = that.height;
-                that.canvasHeightUIAdjusted = that.height - that.offsetY - that.titleSpace;
-                that.columnWidth = (that.width - that.offsetX) / that.buckets.length;
-                that.Scale = 1;
+            if (newWidth < minWidth || that.Scale == 1) {
+                that.currentOffsetX = that.viewport.GetOffsetX();
+                that.currentOffsetY = that.viewport.GetOffsetY();
+                that.currentWidth = minWidth;
+                that.currentHeight = minHeight;
+
+                that.canvasHeightUIAdjusted = minHeight - that.titleSpace;
+                that.columnWidth = minWidth / that.buckets.length;
                 $('.pv-viewarea-graphview-overlay div').fadeIn('slow');
+
+                that.Scale = 1;
                 // Reset the slider to zero 
                 that.dontZoom = true;
                 $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
             } else {
                 //adjust position to base scale - then scale out to new scale
-                //Move the scaled position to the mouse location
-                that.currentOffsetX = evt.x - (((evt.x - that.currentOffsetX) / oldScale) * that.Scale);
-
-                //Work out the scaled position of evt.y and then calc the difference between the actual evt.y
+                var scaledPositionX = ((evt.x - that.currentOffsetX) / oldScale) * that.Scale;
                 var scaledPositionY = ((evt.y - that.currentOffsetY) / oldScale) * that.Scale;
+                that.currentOffsetX = evt.x - scaledPositionX;
                 that.currentOffsetY = evt.y - scaledPositionY;
-                that.canvasHeightUIAdjusted = newHeight - (((that.offsetY + that.titleSpace)/oldScale) * that.Scale);
-
                 that.currentWidth = newWidth;
                 that.currentHeight = newHeight;
+
+                that.canvasHeightUIAdjusted = newHeight - (that.titleSpace* that.Scale);
                 that.columnWidth = newWidth / that.buckets.length;
                 $('.pv-viewarea-graphview-overlay div').fadeOut('slow');
             }
 
-            that.rowscols = that.GetRowsAndColumns(that.columnWidth - 2, that.canvasHeightUIAdjusted, that.maxRatio, that.bigCount);
+            that.rowscols = that.GetRowsAndColumns(that.columnWidth - (4 * that.spacing), that.canvasHeightUIAdjusted - (4 * that.spacing), that.maxRatio, that.bigCount);
             if (that.rowscols.TileHeight < 10 ) that.rowscols.TileHeight = 10;
-            that.SetVisibleTileGraphPositions(that.rowscols, that.currentOffsetX, that.currentOffsetY, true, true);
+            that.SetVisibleTileGraphPositions(that.rowscols, that.currentOffsetX + (2 * that.spacing), that.currentOffsetY - (2 * that.spacing), true, true);
 
             //deselect tiles if zooming back to min size
             if (that.Scale == 1 && oldScale != 1) {
@@ -154,32 +157,32 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
             that.currentOffsetY += dragY;
 
             //LHS bounds check
-            if (dragX > 0 && that.currentOffsetX > that.offsetX) {
+            if (dragX > 0 && that.currentOffsetX > that.viewport.GetOffsetX()) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
             //Top bounds check
-            if (dragY > 0 && (that.currentOffsetY + that.canvasHeightUIAdjusted) > that.currentHeight + that.offsetY) {
+            if (dragY > 0 && (that.currentOffsetY + that.canvasHeightUIAdjusted) > that.currentHeight + that.viewport.GetOffsetY()) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
             //RHS bounds check
             //if the current offset is smaller than the default offset and the zoom scale == 1 then stop drag
-            if (that.currentOffsetX < that.offsetX && that.currentWidth == that.width) {
+            if (that.currentOffsetX < that.viewport.GetOffsetX() && that.currentWidth == that.viewport.GetViewportWidth()) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
-            if (dragX < 0 && (that.currentOffsetX) < -1 * (that.currentWidth - that.width)) {
+            if (dragX < 0 && (that.currentOffsetX) < -1 * (that.currentWidth - that.viewport.GetViewportWidth())) {
                 that.currentOffsetX -= dragX;
                 noChangeX = true;
             }
             //bottom bounds check
 
-            if (that.currentOffsetY < that.offsetY && that.currentHeight == that.height) {
+            if (that.currentOffsetY < that.viewport.GetOffsetY() && that.currentHeight == that.viewport.GetViewportHeight()) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
-            if (dragY < 0 && (that.currentOffsetY - that.offsetY) < -1 * (that.currentHeight - that.height)) {
+            if (dragY < 0 && (that.currentOffsetY - that.viewport.GetOffsetY()) < -1 * (that.currentHeight - that.viewport.GetViewportHeight())) {
                 that.currentOffsetY -= dragY;
                 noChangeY = true;
             }
@@ -194,16 +197,14 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
                 that.OffsetTiles(dragX, dragY);
         });
     },
-    Setup: function (width, height, offsetX, offsetY, tileMaxRatio) {
-        this.width = width;
-        this.height = height;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
+    Setup: function (viewport, tileMaxRatio) {
+        // (viewport instanceof PivotViewer.Views.IPivotViewerView)
+        this.viewport = viewport;
         this.maxRatio = tileMaxRatio;
-        this.currentWidth = this.width;
-        this.currentHeight = this.height;
-        this.currentOffsetX = this.offsetX;
-        this.currentOffsetY = this.offsetY;
+        this.currentWidth = this.viewport.GetViewportWidth();
+        this.currentHeight = this.viewport.GetViewportHeight();
+        this.currentOffsetX = this.viewport.GetOffsetX();
+        this.currentOffsetY = this.viewport.GetOffsetY();
         this.rowscols = null;
         this.bigCount = 0;
     },
@@ -241,8 +242,8 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
         this.buckets = this.Bucketize(dzTiles, currentFilter, this.sortFacet, stringFacets);
 
-        this.columnWidth = (this.width - this.offsetX) / this.buckets.length;
-        this.canvasHeightUIAdjusted = this.height -this.offsetY - this.titleSpace;
+        this.columnWidth = (this.viewport.GetViewportWidth() - this.viewport.GetOffsetX()) / this.buckets.length;
+        this.canvasHeightUIAdjusted = this.viewport.GetViewportHeight() - this.viewport.GetOffsetY() - this.titleSpace;
 
         //Find biggest bucket to determine tile size, rows and cols
         //Also create UI elements
@@ -250,11 +251,13 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
         this.bigCount = 0;
        for (var i = 0; i < this.buckets.length; i++) {
             var styleClass = i % 2 == 0 ? "graphview-bucket-dark" : "graphview-bucket-light";
-            uiElements[i] = "<div class='pv-viewarea-graphview-overlay-bucket " + styleClass + "' id='pv-viewarea-graphview-overlay-bucket-" + i + "' style='width: " + (Math.floor(this.columnWidth) - 4) + "px; height:" + (this.height - 2) + "px; left:" + ((i * this.columnWidth) - 2) + "px;'>";
+            var columnWidthUIAdjusted = Math.floor(this.columnWidth) - (2*this.spacing);
+            var columnOffsetUIAdjusted = (i * (this.columnWidth)) + this.viewport.GetOffsetX() + this.spacing;
+            uiElements[i] = "<div class='pv-viewarea-graphview-overlay-bucket " + styleClass + "' id='pv-viewarea-graphview-overlay-bucket-" + i + "' style='width: " + columnWidthUIAdjusted + "px; left:" + columnOffsetUIAdjusted + "px;'>";
             if (this.buckets[i].startRange == this.buckets[i].endRange)
-                uiElements[i] += "<div class='pv-viewarea-graphview-overlay-buckettitle' style='top: " + (this.canvasHeightUIAdjusted + 4) + "px;'>" + this.buckets[i].startRange + "</div></div>";
+                uiElements[i] += "<div class='pv-viewarea-graphview-overlay-buckettitle'>" + this.buckets[i].startRange + "</div></div>";
             else
-                uiElements[i] += "<div class='pv-viewarea-graphview-overlay-buckettitle' style='top: " + (this.canvasHeightUIAdjusted + 4) + "px;'>" + this.buckets[i].startRange + "<br/>to<br/>" + this.buckets[i].endRange + "</div></div>";
+                uiElements[i] += "<div class='pv-viewarea-graphview-overlay-buckettitle'>" + this.buckets[i].startRange + "<br/>to<br/>" + this.buckets[i].endRange + "</div></div>";
 
             if (this.bigCount < this.buckets[i].Ids.length) {
                 this.bigCount = this.buckets[i].Ids.length;
@@ -263,7 +266,6 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
         //remove previous elements
         var graphViewOverlay = $('.pv-viewarea-graphview-overlay');
-        graphViewOverlay.css('left', this.offsetX + 'px');
         $('.pv-viewarea-graphview-overlay div').fadeOut('slow', function () { $(this).remove(); });
         graphViewOverlay.append(uiElements.join(''));
         $('.pv-viewarea-graphview-overlay div').fadeIn('slow');
@@ -278,7 +280,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
             var filterindex = $.inArray(this.tiles[i].facetItem.Id, currentFilter);
             //set outer location for all tiles not in the filter
             if (filterindex < 0) {
-                this.SetOuterTileDestination(this.width, this.height, this.tiles[i]);
+                this.SetOuterTileDestination(this.viewport.GetViewportWidth() + this.viewport.GetOffsetX() + this.spacing, this.canvasHeightUIAdjusted, this.tiles[i]);
                 this.tiles[i].start = PivotViewer.Utils.Now();
                 this.tiles[i].end = this.tiles[i].start + 1000;
             }
@@ -300,20 +302,20 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
             // Clear selection
             var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
             if (value > 0) { 
-                this.selected = selectedItem = "";
+                that.selected = selectedItem = "";
                 //zoom out
-                this.currentOffsetX = this.offsetX;
-                this.currentOffsetY = this.offsetY;
+                that.currentOffsetX = that.viewport.GetOffsetX();
+                that.currentOffsetY = that.viewport.GetOffsetY();
                 // Zoom using the slider event
                 $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 1);
             }
-            that.rowscols = that.GetRowsAndColumns(that.columnWidth - 2, that.canvasHeightUIAdjusted - that.offsetY, that.maxRatio, that.bigCount);
+            that.rowscols = that.GetRowsAndColumns(that.columnWidth - (4 * that.spacing), that.canvasHeightUIAdjusted - (4 * that.spacing), that.maxRatio, that.bigCount);
             if (that.rowscols.TileHeight < 10 ) that.rowscols.TileHeight = 10;
             for (var i = 0; i < that.tiles.length; i++) {
                 that.tiles[i].origwidth = that.rowscols.TileHeight / that.tiles[i]._controller.GetRatio(that.tiles[i].facetItem.Img);
                 that.tiles[i].origheight = that.rowscols.TileHeight;
             }
-            that.SetVisibleTileGraphPositions(that.rowscols, that.offsetX, that.offsetY, false, false);
+            that.SetVisibleTileGraphPositions(that.rowscols, that.viewport.GetOffsetX() + (2 * that.spacing), that.viewport.GetOffsetY() - (2 * that.spacing), false, false);
 
         }, pt2Timeout);
 
@@ -490,58 +492,61 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
         return bkts;
     },
-    // These need fixing
+    // Gets the total row and total columns of the specified tile
     GetSelectedCol: function (tile, bucket) {
         var that = this;
         var selectedLoc = 0;
-        for (i = 0; i < bucket; i++) {
-          if ($.inArray(tile.facetItem.Id, this.buckets[i].Ids) > 0)
-            selectedLoc++;
+        if (bucket == null) {
+            selectedLoc = tile.selectedLoc;
+        } else {
+            for (i = 0; i < bucket; i++) {
+                if ($.inArray(tile.facetItem.Id, this.buckets[i].Ids) > 0)
+                    selectedLoc++;
+            }
         }
-        //var selectedLoc = tile.selectedLoc;
+
         //Need to account for padding in each column...
-        padding = that.rowscols.PaddingX;
-        colsInBar = that.rowscols.Columns;
-        tileMaxWidth = that.rowscols.TileMaxWidth;
-        selectedBar = Math.floor((tile._locations[selectedLoc].x - that.currentOffsetX) / ((tileMaxWidth * colsInBar) + padding));
-        selectedColInBar = Math.round(((tile._locations[selectedLoc].x - that.currentOffsetX) - (selectedBar * (colsInBar * tileMaxWidth + padding))) / tileMaxWidth);
-        selectedCol = (selectedBar * colsInBar) + selectedColInBar;
+        var padding = that.rowscols.PaddingX;
+        var colsInBar = that.rowscols.Columns;
+        var tileMaxWidth = that.rowscols.TileMaxWidth;
+        var barBounds = ((tileMaxWidth * colsInBar) + padding + (4 * that.spacing));
+        var barOffsetX = (tile._locations[selectedLoc].x - that.currentOffsetX);
+        var selectedBar = Math.floor(barOffsetX / barBounds);
+        var selectedColInBar = Math.floor((barOffsetX - (selectedBar * barBounds)) / tileMaxWidth);
+        var selectedCol = (selectedBar * colsInBar) + selectedColInBar;
+
         return selectedCol;
     },
     GetSelectedRow: function (tile, bucket) {
         var that = this;
         var selectedLoc = 0;
-        for (i = 0; i < bucket; i++) {
-          if ($.inArray(tile.facetItem.Id, this.buckets[i].Ids) > 0)
-            selectedLoc++;
+        if (bucket == null) {
+            selectedLoc = tile.selectedLoc;
+        } else {
+            for (i = 0; i < bucket; i++) {
+                if ($.inArray(tile.facetItem.Id, this.buckets[i].Ids) > 0)
+                    selectedLoc++;
+            }
         }
-        //var selectedLoc = tile.selectedLoc;
-        selectedRow = Math.round((that.canvasHeightUIAdjusted - (tile._locations[selectedLoc].y - that.currentOffsetY)) / tile.height);
+                          
+        var selectedRow = Math.round((that.canvasHeightUIAdjusted - (tile._locations[selectedLoc].y - that.currentOffsetY)) / tile.height);
+
         return selectedRow;
     },
     /// Centres the selected tile
     CentreOnSelectedTile: function (selectedCol, selectedRow) {
         var that = this;
-        var selectedTile;
-        for (var i = 0; i < that.tiles.length; i++) {
-            if (that.tiles[i].IsSelected()) {
-                selectedTile = that.tiles[i];
-                break;
-            }
-        }
 
-        //var rowscols = that.GetRowsAndColumns(that.columnWidth - 2, that.canvasHeightUIAdjusted, that.maxRatio, that.bigCount);
-        that.rowscols = that.GetRowsAndColumns(that.columnWidth - 2, that.canvasHeightUIAdjusted, that.maxRatio, that.bigCount);
-        if (that.rowscols.TileHeight < 10 ) that.rowscols.TileHeight = 10;
-        var bucket = Math.floor(selectedCol/ that.rowscols.Columns);
-        var padding = that.rowscols.PaddingX * bucket;
+        var bucket = Math.floor(selectedCol / that.rowscols.Columns);
+        var padding = (that.rowscols.PaddingX + (4 * that.spacing)) * bucket;
 
-        that.currentOffsetX = ((that.rowscols.TileMaxWidth * selectedCol) * -1) + (that.width / 2) - (that.rowscols.TileMaxWidth / 2) - padding;
+        var alignLeft = -(that.rowscols.TileMaxWidth * selectedCol) - padding;
+        that.currentOffsetX = alignLeft + ((that.viewport.GetViewportWidth() - that.rowscols.TileMaxWidth) / 2);
 
-        //that.currentOffsetY = rowscols.TileHeight * (selectedRow - 1) - (that.canvasHeightUIAdjusted / 2) - (rowscols.TileHeight / 2);  
-        that.currentOffsetY = - that.rowscols.TileHeight * ((that.rowscols.Rows / 2) - (selectedRow + 1)) - ( that.canvasHeightUIAdjusted / 2 ) - (that.rowscols.TileHeight / 2);
+        var alignTop = -that.canvasHeightUIAdjusted + (2 * that.spacing) + (that.rowscols.TileHeight * selectedRow);
+        that.currentOffsetY = alignTop + ((that.viewport.GetViewportHeight() - that.rowscols.TileHeight) / 2);
 
-        that.SetVisibleTileGraphPositions(that.rowscols, that.currentOffsetX, that.currentOffsetY, true, true);
+        that.SetVisibleTileGraphPositions(that.rowscols, that.currentOffsetX + (2 * that.spacing), that.currentOffsetY - (2 * that.spacing), true, true);
     },
     handleSelection: function (selectedItem, selectedTile, clickX, selectedLoc) {
         var that = this;
@@ -577,19 +582,15 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
                 //Used for scaling and centering 
                 //Need to account for paddingin each column...
-                padding = that.rowscols.PaddingX;
-                colsInBar = that.rowscols.Columns;
-                tileMaxWidth = that.rowscols.TileMaxWidth;
-                selectedBar = Math.floor((selectedTile._locations[selectedLoc].x - that.currentOffsetX) / ((selectedTile.width * colsInBar) + padding));
-                selectedColInBar = Math.round(((selectedTile._locations[selectedLoc].x - that.currentOffsetX) - (selectedBar * (colsInBar * tileMaxWidth + padding))) / tileMaxWidth);
-                selectedCol = (selectedBar * colsInBar) + selectedColInBar;
-                selectedRow = Math.round((that.canvasHeightUIAdjusted - (selectedTile._locations[selectedLoc].y - that.currentOffsetY)) / selectedTile.height);
+                selectedCol = that.GetSelectedCol(selectedTile, null);
+                selectedBar = Math.floor(selectedCol / that.rowscols.Columns);
+                selectedRow = that.GetSelectedRow(selectedTile, null);
                 tileHeight = selectedTile.height;
                 tileWidth = selectedTile.height / selectedTile._controller.GetRatio(selectedTile.facetItem.Img);
                 tileOrigHeight = selectedTile.origheight;
                 tileOrigWidth = selectedTile.origwidth;
-                canvasHeight = selectedTile.context.canvas.height
-                canvasWidth = selectedTile.context.canvas.width - ($('.pv-filterpanel').width() + $('.pv-infopanel').width());
+                canvasHeight = selectedTile.context.canvas.height - (4 * that.spacing);
+                canvasWidth = selectedTile.context.canvas.width - ($('.pv-filterpanel').width() + $('.pv-infopanel').width()) - (4 * that.spacing);
             }
 
             // If an item is selected then zoom out but don't set the filter
@@ -605,6 +606,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
                 else
                     origProportion = tileOrigWidth / canvasWidth;
                 //Get scaling factor so max tile dimension is about 60% total
+                this.currentOffsetY = this.viewport.GetOffsetY();
                 //Multiply by two as the zoomslider devides all scaling factors by 2
                 scale = Math.round((0.75 / origProportion) * 2);
 
@@ -619,37 +621,39 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
 // Also need to scale the backgound colums...
 // leave for now - tricky
+                {
 
-              //  if (that.width < that.height) {
-              //      var newWidth = that.width * that.rowscols.Columns * 0.6; //0.6 to leave 10% space
-              //      var newHeight = (that.canvasHeightUIAdjusted / that.width) * newWidth;
+              //  if (that.viewport.GetViewportWidth() < that.viewport.GetViewportHeight()) {
+              //      var newWidth = that.viewport.GetViewportWidth() * that.rowscols.Columns * 0.6; //0.6 to leave 10% space
+              //      var newHeight = (that.canvasHeightUIAdjusted / that.viewport.GetViewportWidth()) * newWidth;
               //  } else {
               //      var newHeight = that.canvasHeightUIAdjusted * that.rowscols.Rows * 0.6;
-              //      var newWidth = (that.width / that.canvasHeightUIAdjusted) * newHeight;
+              //      var newWidth = (that.viewport.GetViewportWidth() / that.canvasHeightUIAdjusted) * newHeight;
               //  }
 
             //    var scaleY = newHeight / that.canvasHeightUIAdjusted;
-            //    var scaleX = newWidth / (that.width - that.offsetX);
+            //    var scaleX = newWidth / (that.viewport.GetViewportWidth() - that.viewport.GetOffsetX());
             //    that.columnWidth = newWidth / that.buckets.length;
 //                that.columnWidth = that.currentWidth / that.buckets.length;
 
                 //var rowscols = that.GetRowsAndColumns(that.columnWidth, newHeight, that.maxRatio, that.bigCount);
 //                var rowscols = that.GetRowsAndColumns(that.columnWidth, that.currentHeight, that.maxRatio, that.bigCount);
 
-                //that.currentOffsetX = -((selectedCol - that.offsetX) * scaleX) + (that.width / 2) - (rowscols.TileMaxWidth / 2);
- //               that.currentOffsetX = -((selectedCol) * (that.currentWidth/that.width)) - that.currentOffsetX + (that.width / 2) - (rowscols.TileMaxWidth / 2);
+                //that.currentOffsetX = -((selectedCol - that.viewport.GetOffsetX()) * scaleX) + (that.viewport.GetViewportWidth() / 2) - (rowscols.TileMaxWidth / 2);
+ //               that.currentOffsetX = -((selectedCol) * (that.currentWidth/that.viewport.GetViewportWidth())) - that.currentOffsetX + (that.viewport.GetViewportWidth() / 2) - (rowscols.TileMaxWidth / 2);
 
 //                var rowNumber = Math.ceil((that.canvasHeightUIAdjusted - selectedRow) / that.rowscols.TileHeight);
-//                that.currentOffsetY = 31 + (rowscols.TileHeight * (rowNumber - 1)l* that.currentWidth/that.width);
+//                that.currentOffsetY = 31 + (rowscols.TileHeight * (rowNumber - 1)l* that.currentWidth/that.viewport.GetViewportWidth());
 
 //                that.SetVisibleTileGraphPositions(rowscols, that.currentOffsetX, that.currentOffsetY, true, true);
+                }
                 $('.pv-viewarea-graphview-overlay div').fadeOut('slow');
             } else {
                 that.selected = selectedItem = "";
                 selectedBar = 0;
                 //zoom out
-                that.currentOffsetX = that.offsetX;
-                that.currentOffsetY = that.offsetY;
+                that.currentOffsetX = that.viewport.GetOffsetX();
+                that.currentOffsetY = that.viewport.GetOffsetY();
 
                 // Zoom using the slider event
                 var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
@@ -661,7 +665,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
              $.publish("/PivotViewer/Views/Item/Selected", [{id: selectedItem, bkt: selectedBar}]);
 
         if (!found && !dontFilter) {
-            var bucketNumber = Math.floor((clickX - that.offsetX) / that.columnWidth);
+            var bucketNumber = Math.floor((clickX - that.viewport.GetOffsetX()) / that.columnWidth);
             $.publish("/PivotViewer/Views/Item/Filtered", [{ Facet: that.sortFacet, Item: that.buckets[bucketNumber].startRange, MaxRange: that.buckets[bucketNumber].endRange, Values: that.buckets[bucketNumber].Values, ClearFacetFilters:true}]);
         }
     }
