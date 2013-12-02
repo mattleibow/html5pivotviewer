@@ -47,11 +47,18 @@
 }
 
 .pv-toolbarpanel-brandimage {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     height: 22px;
     float: left;
+    margin-left: 25px;
 }
 
 .pv-toolbarpanel-facetbreadcrumb {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     margin-top: 5px;
     margin-left: 5px;
     float: left;
@@ -86,9 +93,12 @@
 }
 
 .pv-toolbarpanel-zoomcontrols {
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     float: right;
     width: 200px;
-    height: 20px;
     margin-right: 4px;
     border: 1px solid #D3D4D4;
 }
@@ -98,24 +108,45 @@
 }
 
 .pv-toolbarpanel-viewcontrols {
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     float: right;
     margin-right: 5px;
-    height: 20px;
 }
 
 .pv-toolbarpanel-view {
-    height: 20px;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     border: 1px solid #D3D4D4;
     float: left;
     cursor: pointer;
 }
 
+    .pv-toolbarpanel-view img {
+        height: 100%;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
 .pv-toolbarpanel-sortcontrols {
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     float: right;
     margin-right: 5px;
 }
 
 .pv-toolbarpanel-sort {
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .pv-mainpanel {

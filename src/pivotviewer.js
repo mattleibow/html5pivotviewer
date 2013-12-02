@@ -157,6 +157,7 @@
         // size the floating panes
         ResizeView.FilterPanel();
         ResizeView.InfoPanel();
+        ResizeView.Breadcrumb();
         // size the canvas
         var canvas = $(".pv-viewarea-canvas")[0];
         canvas.width = _self.width();
@@ -164,6 +165,19 @@
         if (animate) {
             FilterCollection(false);
         }
+    };
+    ResizeView.Breadcrumb = function() {
+        //Set the width for displaying breadcrumbs as we now know the control sizes 
+        //Hardcoding the value for the width of the viewcontrols images (124=21*4) as the webkit browsers 
+        //do not know the size of the images at this point.
+        var rightControls = $('.pv-toolbarpanel-zoomcontrols').outerWidth(true) + $('.pv-toolbarpanel-viewcontrols').outerWidth(true) + $('.pv-toolbarpanel-sortcontrols').outerWidth(true);
+        var leftControls = $('.pv-toolbarpanel-brandimage').outerWidth(true) + $('.pv-toolbarpanel-name').outerWidth(true);
+        var controls = leftControls + rightControls;
+        var breadcrumbBorder = $(".pv-toolbarpanel-facetbreadcrumb").outerWidth(true) - $(".pv-toolbarpanel-facetbreadcrumb").innerWidth();
+        var controlsWidth = $('.pv-toolbarpanel').innerWidth() - controls - breadcrumbBorder - 4 /* in case of rounding errors */;
+
+        $('.pv-toolbarpanel-facetbreadcrumb').width(controlsWidth);
+
     };
     ResizeView.FilterPanel = function() {
         ResizeView.verticalCenter(".pv-filterpanel", ".pv-filterpanel-search", ".pv-filterpanel-version", ".pv-filterpanel-accordion", 3);
@@ -226,12 +240,7 @@
         _initMapType = _viewerState.MapType;
         _initMapZoom = _viewerState.MapZoom;
 
-        //Set the width for displaying breadcrumbs as we now know the control sizes 
-        //Hardcoding the value for the width of the viewcontrols images (124=21*4) as the webkit browsers 
-        //do not know the size of the images at this point.
-        var controlsWidth = $('.pv-toolbarpanel').innerWidth() - ($('.pv-toolbarpanel-brandimage').outerWidth(true) +25 + $('.pv-toolbarpanel-name').outerWidth(true) + $('.pv-toolbarpanel-zoomcontrols').outerWidth(true) + 124 + $('.pv-toolbarpanel-sortcontrols').outerWidth(true));
-
-        $('.pv-toolbarpanel-facetbreadcrumb').css('width', controlsWidth + 'px');
+        ResizeView.Breadcrumb();
 
         //select first view
         if (_viewerState.View != null) {
@@ -589,6 +598,7 @@
                 }
             } catch (ex) { alert(ex.Message); }
         }
+        ResizeView.Breadcrumb();
 
        // The table and the map view needs to know about the facet categories
        _views[2].SetFacetCategories(PivotCollection);
@@ -1273,7 +1283,7 @@
                 infopanelDetails.append("<div class='pv-infopanel-detail-description' style='height:100px;'>" + selectedItem.Description + "</div><div class='pv-infopanel-detail-description-more'>More</div>");
             }
             // nav arrows...
-            if (selectedItem.Id == _filterItems[0].Id && selectedItem == _filterItems[_filterItems.length - 1]) {
+            if (selectedItem.Id == _filterItems[0].Id && selectedItem.Id == _filterItems[_filterItems.length - 1].Id) {
                 $('.pv-infopanel-controls-navright').hide();
                 $('.pv-infopanel-controls-navrightdisabled').show();
                 $('.pv-infopanel-controls-navleft').hide();
@@ -1389,7 +1399,7 @@
             }
             if (PivotCollection.FacetCategories[i].Name == evt.Facet && 
                 PivotCollection.FacetCategories[i].Type == PivotViewer.Models.FacetType.Number) {
-                var s = $('#pv-filterpanel-numericslider-' + PivotViewer.Utils.EscapeMetaChars(evt.Facet));
+                var s = $('#pv-filterpanel-numericslider-' + PivotViewer.Utils.EscapeMetaChars(CleanName(evt.Facet)));
                 FacetSliderDrag(s, evt.Item, evt.MaxRange);
             }
         }
