@@ -29,19 +29,13 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
         var sortReverseAttribute = true;
         var sortReverseValue = true;
     },
-    Setup: function (width, height, offsetX, offsetY, tileMaxRatio) {
-        this.width = width;
-        this.height = height;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.currentWidth = this.width;
-        this.currentHeight = this.height;
-        this.currentOffsetX = this.offsetX;
-        this.currentOffsetY = this.offsetY;
-
-        $('.pv-viewpanel').append("<div style='visibility:hidden;position:relative;' id='pv-table-loader'><img src='images/loading.gif'></img></div>");
-        $('#pv-table-loader').css('top', (this.height / 2) - 33 +'px');
-        $('#pv-table-loader').css('left', (this.width / 2) - 43 +'px');
+    Setup: function (viewport, tileMaxRatio) {
+        // (viewport instanceof PivotViewer.Views.IPivotViewerView)
+        this.viewport = viewport;
+        this.currentWidth = this.viewport.GetViewportWidth();
+        this.currentHeight = this.viewport.GetViewportHeight();
+        this.currentOffsetX = this.viewport.GetOffsetX();
+        this.currentOffsetY = this.viewport.GetOffsetY();
     },
     Filter: function (dzTiles, currentFilter, sortFacet, stringFacets, changingView, selectedItem) {
         var that = this;
@@ -135,6 +129,15 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
     },
     CreateTable: function ( currentFilter, selectedFacet, sortKey, sortReverse ) {
         var that = this;
+        $(".pv-loading").fadeIn(function () {
+            setTimeout(function() {
+                that.CreateTableInner(currentFilter, selectedFacet, sortKey, sortReverse);
+                $(".pv-loading").fadeOut();
+            }, 0);
+        });
+    },
+    CreateTableInner: function ( currentFilter, selectedFacet, sortKey, sortReverse ) {
+        var that = this;
         var table = $('#pv-table');
         var showAllFacets = false; 
         var tableRows = new Array();
@@ -144,9 +147,8 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
         var offset;
 
         if (selectedFacet == null || selectedFacet == "" || typeof (selectedFacet) == undefined)
-          showAllFacets = true;  
-        $('.pv-tableview-table').css('height', this.height - 12 + 'px');
-        $('.pv-tableview-table').css('width', this.width - 415 + 'px');
+            showAllFacets = true;
+        $('.pv-tableview-table').css('left', that.viewport.GetOffsetX() + 'px');
 
         if (sortReverse) {
             sortImage = "images/sort-up.png";
@@ -352,7 +354,6 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
          
             // Table view events
             $('.pv-tableview-heading').on('click', function (e) {
-                $('#pv-table-loader').show();
                 var id = e.originalEvent.target.id;
          
                 var filter = [];
@@ -388,24 +389,19 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
          
                 that.sortKey = id;
                 that.CreateTable (filter, that.selectedFacet, id, sortReverse);
-                $('#pv-table-loader').fadeOut();
             }); 
             $('.pv-tableview-odd-row').on('click', function (e) {
-                $('#pv-table-loader').show();
                 $('.tooltipinter').tooltipster('hide');
                 $('.tooltipcustom').tooltipster('hide');
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
-                $('#pv-table-loader').fadeOut();
 ;
             }); 
             $('.pv-tableview-even-row').on('click', function (e) {
-                $('#pv-table-loader').show();
                 $('.tooltipinter').tooltipster('hide');
                 $('.tooltipcustom').tooltipster('hide');
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
-                $('#pv-table-loader').fadeOut();
             }); 
         }
     },

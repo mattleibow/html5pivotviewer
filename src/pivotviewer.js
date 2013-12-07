@@ -229,7 +229,7 @@
         AttachEventHandlers();
 
         //loading completed
-        $('.pv-loading').remove();
+        $('.pv-loading').fadeOut();
 
         //Apply ViewerState filters
         ApplyViewerState();

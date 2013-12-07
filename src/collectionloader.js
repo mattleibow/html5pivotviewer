@@ -51,7 +51,7 @@ PivotViewer.Models.Loaders.CXMLLoader = PivotViewer.Models.Loaders.ICollectionLo
 
                 if (collectionRoot == undefined) {
                     //Make sure throbber is removed else everyone thinks the app is still running
-                    $('.pv-loading').remove();
+                    $('.pv-loading').fadeOut();
  
                     //Display message so the user knows something is wrong
                     var msg = '';
@@ -111,7 +111,7 @@ PivotViewer.Models.Loaders.CXMLLoader = PivotViewer.Models.Loaders.ICollectionLo
                     var facetItem = $(facetItems[0]).find("Item");
                     if (facetItem.length == 0) {
                         //Make sure throbber is removed else everyone thinks the app is still running
-                        $('.pv-loading').remove();
+                        $('.pv-loading').fadeOut();
  
                         //Display a message so the user knows something is wrong
                         var msg = '';
@@ -214,7 +214,7 @@ PivotViewer.Models.Loaders.CXMLLoader = PivotViewer.Models.Loaders.ICollectionLo
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 //Make sure throbber is removed else everyone thinks the app is still running
-                $('.pv-loading').remove();
+                $('.pv-loading').fadeOut();
 
                 //Display a message so the user knows something is wrong
                 var msg = '';

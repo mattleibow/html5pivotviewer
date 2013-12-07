@@ -14,6 +14,8 @@
 }
 
 .pv-loading {
+    background: #F5F7F9;
+    z-index: 9999;
     width: 100px;
     font-family: Tahoma, Sans-Serif;
     position: absolute;
@@ -656,13 +658,16 @@
 
 .pv-tableview-table {
     position: absolute;
-    top: 0px;
-    left: 193px;
-    padding: 0px 3px 0px 3px;
+    left: 210px;
     display: none;
     overflow-y: auto;
-    margin-top: 5px;
-    margin-left: 5px;
+    top: 5px;
+    right: 5px;
+    bottom: 5px;
+}
+
+.pv-tableview-table table {
+    width: 100%;
 }
 
 .pv-tableview-odd-row {
@@ -679,6 +684,18 @@
     background: -webkit-gradient(linear, left top, left bottom, from(#DDDDDD), to(#D4D4D4));
     background: -moz-linear-gradient(top, #DDDDDD, #D4D4D4);
     cursor: pointer;
+}
+
+.pv-tableview-heading #pv-key {
+    width: 20%;
+}
+
+.pv-tableview-heading #pv-facet {
+    width: 10%;
+}
+
+.pv-tableview-heading #pv-value {
+    width: 70%;
 }
 
 .pv-tableview-odd-row:hover {

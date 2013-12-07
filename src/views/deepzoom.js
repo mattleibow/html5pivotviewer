@@ -55,7 +55,7 @@ PivotViewer.Views.DeepZoomImageController = PivotViewer.Views.IImageController.s
 
                 var items = $(xml).find("I");
                 if (items.length == 0) {
-                    $('.pv-loading').remove();
+                    $('.pv-loading').fadeOut();
 
                     //Throw an alert so the user knows something is wrong
                     var msg = '';
@@ -106,7 +106,7 @@ PivotViewer.Views.DeepZoomImageController = PivotViewer.Views.IImageController.s
              },
              error: function(jqXHR, textStatus, errorThrown) {
                 //Make sure throbber is removed else everyone thinks the app is still running
-                $('.pv-loading').remove();
+                $('.pv-loading').fadeOut();
 
                 //Throw an alert so the user knows something is wrong
                 var msg = '';
