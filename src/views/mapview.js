@@ -39,15 +39,13 @@ PivotViewer.Views.MapView = PivotViewer.Views.IPivotViewerView.subClass({
         this.applyBookmark = false;
         var that = this;
     },
-    Setup: function (width, height, offsetX, offsetY, tileMaxRatio) { 
-        this.width = width;
-        this.height = height;
-        this.offsetX = offsetX;
-        this.offsetY = offsetY;
-        this.currentWidth = this.width;
-        this.currentHeight = this.height;
-        this.currentOffsetX = this.offsetX;
-        this.currentOffsetY = this.offsetY;
+    Setup: function (viewport, tileMaxRatio) {
+        // (viewport instanceof PivotViewer.Views.IPivotViewerView)
+        this.viewport = viewport;
+        this.currentWidth = this.viewport.GetViewportWidth();
+        this.currentHeight = this.viewport.GetViewportHeight();
+        this.currentOffsetX = this.viewport.GetOffsetX();
+        this.currentOffsetY = this.viewport.GetOffsetY();
         // Check for local storage support
         if (Modernizr.localstorage)
             this.localStorage = true;
@@ -283,8 +281,10 @@ PivotViewer.Views.MapView = PivotViewer.Views.IPivotViewerView.subClass({
             //Now do the geocoding
             this.GetLocationsFromNames();
         } //else {
-            $('.pv-mapview-canvas').css('height', this.height - 12 + 'px');
-            $('.pv-mapview-canvas').css('width', this.width - 415 + 'px');
+            $('.pv-mapview-canvas')
+                .css('left', that.viewport.GetOffsetX() + 'px')
+                .css('top', that.viewport.GetOffsetY() + 'px');
+
             if (selectedItem)
                 this.CreateMap(selectedItem.Id);
             else

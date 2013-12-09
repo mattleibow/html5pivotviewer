@@ -148,7 +148,9 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
 
         if (selectedFacet == null || selectedFacet == "" || typeof (selectedFacet) == undefined)
             showAllFacets = true;
-        $('.pv-tableview-table').css('left', that.viewport.GetOffsetX() + 'px');
+        $('.pv-tableview-table')
+            .css('left', that.viewport.GetOffsetX() + 'px')
+            .css('top', that.viewport.GetOffsetY() + 'px');
 
         if (sortReverse) {
             sortImage = "images/sort-up.png";
