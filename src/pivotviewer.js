@@ -160,8 +160,10 @@
         ResizeView.Breadcrumb();
         // size the canvas
         var canvas = $(".pv-viewarea-canvas")[0];
-        canvas.width = _self.width();
-        canvas.height = $('.pv-viewpanel').height();
+        if (canvas) {
+            canvas.width = _self.width();
+            canvas.height = $('.pv-viewpanel').height();
+        }
         if (animate) {
             FilterCollection(false);
         }
