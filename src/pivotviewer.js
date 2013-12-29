@@ -164,7 +164,7 @@
             canvas.width = _self.width();
             canvas.height = $('.pv-viewpanel').height();
         }
-        if (animate) {
+        if (animate && _tileController) {
             FilterCollection(false);
         }
     };
