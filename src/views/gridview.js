@@ -251,7 +251,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
                 this.currentOffsetX = this.viewport.GetOffsetX();
                 this.currentOffsetY = this.viewport.GetOffsetY();
                 // Zoom using the slider event
-                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 1);
+                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
                 var rowscols = this.GetRowsAndColumns(this.currentWidth - this.viewport.GetOffsetX(), this.currentHeight - this.viewport.GetOffsetY(), this.maxRatio, this.tiles.length);
                 var clearFilter = [];
                 for (var i = 0; i < this.tiles.length; i++) {
@@ -400,9 +400,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
         //because zooming to zero unselects everything...)
         if (selectedItem != null && that.selected != selectedItem) {
             if (that.selected == ""){
-                var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
-                if (value != 0)
-                   $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
+                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
             }
         }
 
@@ -441,9 +439,7 @@ PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
             that.currentOffsetX = that.viewport.GetOffsetX();
             that.currentOffsetY = that.viewport.GetOffsetY();
             // Zoom using the slider event
-            var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
-            value = 0;
-            $('.pv-toolbarpanel-zoomslider').slider('option', 'value', value);
+            $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
         }
 
         $.publish("/PivotViewer/Views/Item/Selected", [{id: selectedItem, bkt: 0}]);

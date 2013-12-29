@@ -307,7 +307,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
                 that.currentOffsetX = that.viewport.GetOffsetX();
                 that.currentOffsetY = that.viewport.GetOffsetY();
                 // Zoom using the slider event
-                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 1);
+                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
             }
             that.rowscols = that.GetRowsAndColumns(that.columnWidth - (4 * that.spacing), that.canvasHeightUIAdjusted - (4 * that.spacing), that.maxRatio, that.bigCount);
             if (that.rowscols.TileHeight < 10 ) that.rowscols.TileHeight = 10;
@@ -612,9 +612,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
 
                 // Zoom using the slider event
                 if (that.selected == ""){
-                    var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
-                    value = scale; 
-                    $('.pv-toolbarpanel-zoomslider').slider('option', 'value', value);
+                    $('.pv-toolbarpanel-zoomslider').slider('option', 'value', scale);
                 }
                 that.selected = selectedItem;
                 that.CentreOnSelectedTile(selectedCol, selectedRow);
@@ -656,9 +654,7 @@ PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
                 that.currentOffsetY = that.viewport.GetOffsetY();
 
                 // Zoom using the slider event
-                var value = $('.pv-toolbarpanel-zoomslider').slider('option', 'value');
-                value = 0; 
-                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', value);
+                $('.pv-toolbarpanel-zoomslider').slider('option', 'value', 0);
 
                 $('.pv-viewarea-graphview-overlay div').fadeIn('slow');
             }
