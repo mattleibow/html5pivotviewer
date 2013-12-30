@@ -18,9 +18,9 @@
 /// Grid view
 ///
 PivotViewer.Views.GridView = PivotViewer.Views.TileBasedView.subClass({
-    init: function () {
+    init: function (displayOptions) {
+        this._super(displayOptions);
         this.Scale = 1;
-        this._super();
         this.dontZoom = false;
         var that = this;
         //Event Handlers

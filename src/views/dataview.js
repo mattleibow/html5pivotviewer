@@ -16,8 +16,8 @@
 
 ///Data View
 PivotViewer.Views.DataView = PivotViewer.Views.IPivotViewerView.subClass({
-	init: function () {
-		this._super();
+	init: function (displayOptions) {
+	    this._super(displayOptions);
 	},
 	Setup: function (width, height, offsetX, offsetY, tileMaxRatio) { },
 	Filter: function (dzTiles, currentFilter, sortFacet) { },

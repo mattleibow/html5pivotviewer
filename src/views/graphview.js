@@ -18,8 +18,8 @@
 /// Graph (histogram) View
 ///
 PivotViewer.Views.GraphView = PivotViewer.Views.TileBasedView.subClass({
-    init: function () {
-        this._super();
+    init: function (displayOptions) {
+        this._super(displayOptions);
         var that = this;
         this.buckets = [];
         this.Scale = 1;

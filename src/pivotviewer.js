@@ -32,6 +32,9 @@
         }
     });
 
+    PivotViewer.PivotViewerDisplayOptions = PivotViewer.IPivotViewerDisplayOptions.subClass({
+    });
+
     var _views = [],
         _facetItemTotals = [], //used to store the counts of all the string facets - used when resetting the filters
         _facetNumericItemTotals = [], //used to store the counts of all the numeric facets - used when resetting the filters
@@ -64,13 +67,26 @@
         _googleAPILoaded = false,
         _googleAPIKey,
         _pivotCollection = new PivotViewer.Models.Collection(),
-        _viewport = new PivotViewer.PivotViewerViewport();
+        _viewport = new PivotViewer.PivotViewerViewport(),
+        _displayOptions = new PivotViewer.PivotViewerDisplayOptions();
+
+    var defaults = {
+        Loader: undefined,
+        ImageController: undefined,
+        GoogleAPIKey: undefined,
+        ViewerState: undefined,
+        AdvancedTooltips: false
+    };
 
     var methods = {
         init: function (options) {
+            options = $.extend({}, defaults, options);
+
             _self = this;
             _self.addClass('pv-wrapper');
             InitPreloader();
+
+            _displayOptions.AdvancedTooltips = options.AdvancedTooltips;
 
             //Collection loader
             if (options.Loader == undefined)
@@ -580,10 +596,10 @@
         var viewPanel = $('.pv-viewpanel');
 
         //Create instances of all the views
-        _views.push(new PivotViewer.Views.GridView());
-        _views.push(new PivotViewer.Views.GraphView());
-        _views.push(new PivotViewer.Views.TableView());
-        _views.push(new PivotViewer.Views.MapView());
+        _views.push(new PivotViewer.Views.GridView(_displayOptions));
+        _views.push(new PivotViewer.Views.GraphView(_displayOptions));
+        _views.push(new PivotViewer.Views.TableView(_displayOptions));
+        _views.push(new PivotViewer.Views.MapView(_displayOptions));
 
         //init the views interfaces
         for (var i = 0; i < _views.length; i++) {

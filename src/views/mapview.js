@@ -16,8 +16,8 @@
 
 ///Map View
 PivotViewer.Views.MapView = PivotViewer.Views.IPivotViewerView.subClass({
-    init: function () {
-        this._super();
+    init: function (displayOptions) {
+        this._super(displayOptions);
         this.locCache = Array();
         this.locList = Array();
         this.inScopeLocList = Array();

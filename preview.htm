@@ -4,7 +4,7 @@
     <title>HTML 5 PivotViewer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link href="style/pivotviewer.css" rel="stylesheet" type="text/css" />
-    
+
     <!-- libs -->
     <script src="lib/jquery/jquery-1.9.1.js"></script>
     <script src="lib/jquery/jquery-migrate-1.2.1.js"></script>
@@ -38,7 +38,7 @@
     <script src="src/views/LoadImageSetHelper.js"></script>
     <script src="src/views/mapview.js"></script>
     <script src="src/views/tableview.js"></script>
-    
+
     <style>
         html, body, div {
             padding: 0;
@@ -54,7 +54,8 @@
 
             $("#pivotviewer").outerHeight($(window).height() - 50).outerWidth($(window).width() - 50);
             $('#pivotviewer').PivotViewer({
-                Loader: new PivotViewer.Models.Loaders.CXMLLoader("http://localhost:55555/api/deepzoomtiles/coverscollection.cxml")
+                Loader: new PivotViewer.Models.Loaders.CXMLLoader("http://localhost:55555/api/deepzoomtiles/coverscollection.cxml"),
+                AdvancedTooltips: true
             });
 
             $(window).resizeEnd(function () {

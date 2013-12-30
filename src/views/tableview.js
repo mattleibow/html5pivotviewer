@@ -18,8 +18,8 @@
 /// Table view
 ///
 PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
-    init: function () {
-        this._super();
+    init: function (displayOptions) {
+        this._super(displayOptions);
         var that = this;
         var currentFilter;
         var selectedFacet = "";
@@ -340,19 +340,19 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
             $('#pv-table-data').colResizable({disable:true});
             $('#pv-table-data').colResizable({disable:false});
 
-/*
-            $('.tooltipinter').tooltipster({
-                interactive: true,
-                delay: 500,
-                offsetY: -15,
-                arrow: false
-            });
-            $('.tooltipcustom').tooltipster({
-                delay: 500,
-                offsetY: -15,
-                arrow: false
-            });
-*/
+            if (that.displayOptions.AdvancedTooltips) {
+                $('.tooltipinter').tooltipster({
+                    interactive: true,
+                    delay: 500,
+                    offsetY: -15,
+                    arrow: false
+                });
+                $('.tooltipcustom').tooltipster({
+                    delay: 500,
+                    offsetY: -15,
+                    arrow: false
+                });
+            }
          
             // Table view events
             $('.pv-tableview-heading').on('click', function (e) {
@@ -360,8 +360,10 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
          
                 var filter = [];
          
-                $('.tooltipinter').tooltipster('hide');
-                $('.tooltipcustom').tooltipster('hide');
+                if (that.displayOptions.AdvancedTooltips) {
+                    $('.tooltipinter').tooltipster('hide');
+                    $('.tooltipcustom').tooltipster('hide');
+                }
 
                 if (that.selectedId == "" || that.selectedId == null )
                     filter = that.currentFilter;
@@ -393,15 +395,18 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
                 that.CreateTable (filter, that.selectedFacet, id, sortReverse);
             }); 
             $('.pv-tableview-odd-row').on('click', function (e) {
-                $('.tooltipinter').tooltipster('hide');
-                $('.tooltipcustom').tooltipster('hide');
+                if (that.displayOptions.AdvancedTooltips) {
+                    $('.tooltipinter').tooltipster('hide');
+                    $('.tooltipcustom').tooltipster('hide');
+                }
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
-;
             }); 
             $('.pv-tableview-even-row').on('click', function (e) {
-                $('.tooltipinter').tooltipster('hide');
-                $('.tooltipcustom').tooltipster('hide');
+                if (that.displayOptions.AdvancedTooltips) {
+                    $('.tooltipinter').tooltipster('hide');
+                    $('.tooltipcustom').tooltipster('hide');
+                }
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
             }); 

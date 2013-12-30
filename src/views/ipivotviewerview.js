@@ -16,11 +16,12 @@
 
 ///Views interface - all views must implement this
 PivotViewer.Views.IPivotViewerView = Object.subClass({
-	init: function () {
+    init: function (displayOptions) {
 		this.isActive = false;
 		this.init = true;
 		this.selected = "";
 		this.tiles = [];
+		this.displayOptions = displayOptions;
 	},
 	Setup: function (width, height, offsetX, offsetY, tileMaxRatio) { },
 	Filter: function (dzTiles, currentFilter, sortFacet) { },

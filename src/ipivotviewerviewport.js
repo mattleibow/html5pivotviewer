@@ -22,3 +22,8 @@ PivotViewer.IPivotViewerViewport = Object.subClass({
 	GetOffsetX: function () { },
 	GetOffsetY: function () { }
 });
+
+///Display options interface - all views must accept this as a parameter
+PivotViewer.IPivotViewerDisplayOptions = Object.subClass({
+    AdvancedTooltips: false
+});
