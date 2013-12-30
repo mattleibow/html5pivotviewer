@@ -717,24 +717,25 @@
     bottom: 5px;
 }
 
-/*
- * Tooltipster styles   
+/*!
+ * jQuery UI Tooltip 1.10.3
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
  */
-
-pv-wrapper .tooltipster-default {
-    background: #fff;
-    box-shadow: 0px 0px 14px rgba(0,0,0,0.3);
+.ui-tooltip {
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 9999;
+    max-width: 300px;
+    -webkit-box-shadow: 0 0 14px #aaa;
+    box-shadow: 0 0 14px #aaa;
+    font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
+    font-size: 12px;
+    border-width: 2px;
 }
-
-    /* Use this next selector to style things like font-size and line-height: */
-    pv-wrapper .tooltipster-default .tooltipster-content {
-        font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
-        font-size: 12px;
-        line-height: 14px;
-        padding: 4px 8px;
-        overflow: hidden;
-    }
-
 
 /*
  * jQuery UI CSS Framework 1.8.16

@@ -341,28 +341,18 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
             $('#pv-table-data').colResizable({disable:false});
 
             if (that.displayOptions.AdvancedTooltips) {
-                $('.tooltipinter').tooltipster({
-                    interactive: true,
-                    delay: 500,
-                    offsetY: -15,
-                    arrow: false
-                });
-                $('.tooltipcustom').tooltipster({
-                    delay: 500,
-                    offsetY: -15,
-                    arrow: false
-                });
+                // create nice tooltips after adding the items
+                table.tooltip({ position: { my: "center bottom", at: "center top" } });
             }
-         
+
             // Table view events
             $('.pv-tableview-heading').on('click', function (e) {
                 var id = e.originalEvent.target.id;
          
                 var filter = [];
-         
+
                 if (that.displayOptions.AdvancedTooltips) {
-                    $('.tooltipinter').tooltipster('hide');
-                    $('.tooltipcustom').tooltipster('hide');
+                    table.tooltip("close");
                 }
 
                 if (that.selectedId == "" || that.selectedId == null )
@@ -396,16 +386,14 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
             }); 
             $('.pv-tableview-odd-row').on('click', function (e) {
                 if (that.displayOptions.AdvancedTooltips) {
-                    $('.tooltipinter').tooltipster('hide');
-                    $('.tooltipcustom').tooltipster('hide');
+                    table.tooltip("close");
                 }
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
             }); 
             $('.pv-tableview-even-row').on('click', function (e) {
                 if (that.displayOptions.AdvancedTooltips) {
-                    $('.tooltipinter').tooltipster('hide');
-                    $('.tooltipcustom').tooltipster('hide');
+                    table.tooltip("close");
                 }
                 var id = e.originalEvent.target.id;
                 that.CellClick(id, e.currentTarget.cells );
