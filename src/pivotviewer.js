@@ -607,7 +607,7 @@
                 if (_views[i] instanceof PivotViewer.Views.IPivotViewerView) {
                     _views[i].Setup(_viewport, _tileController.GetMaxTileRatio());
                     viewPanel.append("<div class='pv-viewpanel-view' id='pv-viewpanel-view-" + i + "'>" + _views[i].GetUI() + "</div>");
-                    $('.pv-toolbarpanel-viewcontrols').append("<div class='pv-toolbarpanel-view' id='pv-toolbarpanel-view-" + i + "' title='" + _views[i].GetViewName() + "'><img id='pv-viewpanel-view-" + i + "-image' src='" + _views[i].GetButtonImage() + "' alt='" + _views[i].GetViewName() + "' /></div>");
+                    $('.pv-toolbarpanel-viewcontrols').append("<div class='pv-toolbarpanel-view' id='pv-toolbarpanel-view-" + i + "' title='" + _views[i].GetViewName() + "'><div id='pv-viewpanel-view-" + i + "-image' class='pv-toolbarpanel-view-image " + _views[i].GetButtonImage() + "'></div></div>");
                 } else {
                     var msg = '';
                     msg = msg + 'View does not inherit from PivotViewer.Views.IPivotViewerView<br>';
@@ -655,12 +655,14 @@
         //Deselect all views
         for (var i = 0; i < _views.length; i++) {
             if (viewNumber != i) {
-                $('#pv-viewpanel-view-' + i + '-image').attr('src', _views[i].GetButtonImage());
+                $('#pv-viewpanel-view-' + i + '-image').removeClass(_views[i].GetButtonImageSelected()).addClass(_views[i].GetButtonImage());
+                $('#pv-toolbarpanel-view-' + i).removeClass('pv-toolbarpanel-view-selected');
                 _views[i].Deactivate();
                 _views[i].init = false;
             }
         }
-        $('#pv-viewpanel-view-' + viewNumber + '-image').attr('src', _views[viewNumber].GetButtonImageSelected());
+        $('#pv-viewpanel-view-' + viewNumber + '-image').removeClass(_views[viewNumber].GetButtonImage()).addClass(_views[viewNumber].GetButtonImageSelected());
+        $('#pv-toolbarpanel-view-' + viewNumber).addClass('pv-toolbarpanel-view-selected');
         if (_currentView == 1 && (viewNumber == 2 || viewNumber == 3)) {
             // Move tiles back to grid positions - helps with maintaining selected item 
             // when changing views

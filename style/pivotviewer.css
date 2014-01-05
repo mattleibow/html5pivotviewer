@@ -128,12 +128,48 @@
     cursor: pointer;
 }
 
-    .pv-toolbarpanel-view img {
+    .pv-toolbarpanel-view-image {
         height: 100%;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: 28px;
     }
+
+    .pv-toolbarpanel-view-image.grid-view {
+        background-image: url('../images/GridView.png');
+    }
+    .pv-toolbarpanel-view-image.grid-view-selected {
+        background-image: url('../images/GridViewSelected.png');
+    }
+
+    .pv-toolbarpanel-view-image.graph-view {
+        background-image: url('../images/GraphView.png');
+    }
+    .pv-toolbarpanel-view-image.graph-view-selected {
+        background-image: url('../images/GraphViewSelected.png');
+    }
+
+    .pv-toolbarpanel-view-image.map-view {
+        background-image: url('../images/MapView.png');
+    }
+    .pv-toolbarpanel-view-image.map-view-selected {
+        background-image: url('../images/MapViewSelected.png');
+    }
+
+    .pv-toolbarpanel-view-image.table-view {
+        background-image: url('../images/TableView.png');
+    }
+    .pv-toolbarpanel-view-image.table-view-selected {
+        background-image: url('../images/TableViewSelected.png');
+    }
+
+.pv-toolbarpanel-view-selected {
+    border-color: #9CCEE4;
+    background-color: #D6D8D9;
+}
 
 .pv-toolbarpanel-sortcontrols {
     height: 100%;

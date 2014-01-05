@@ -293,10 +293,10 @@ PivotViewer.Views.MapView = PivotViewer.Views.IPivotViewerView.subClass({
     },
     GetUI: function () { return ''; },
     GetButtonImage: function () {
-        return 'images/MapView.png';
+        return 'map-view';
     },
     GetButtonImageSelected: function () {
-        return 'images/MapViewSelected.png';
+        return 'map-view-selected';
     },
     GetViewName: function () { return 'Map View'; },
     MakeGeocodeCallBack: function(locName) {
