@@ -23,9 +23,12 @@
     padding: 12px;
 }
 
-    .pv-loading img {
+    .pv-loading-image {
         display: block;
         margin: 0 auto 12px auto;
+        background: url('../images/loading.gif') center center no-repeat;
+        width: 32px;
+        height: 32px;
     }
 
     .pv-loading span {
@@ -734,6 +737,22 @@
     width: 70%;
 }
 
+.pv-tableview-sort-up,
+.pv-tableview-sort-down {
+    display: inline-block;
+    background: transparent center center no-repeat;
+    width: 16px;
+    height: 8px;
+}
+
+.pv-tableview-sort-up {
+    background-image: url('../images/sort-up.png');
+}
+
+.pv-tableview-sort-down {
+    background-image: url('../images/sort-down.png');
+}
+
 .pv-tableview-odd-row:hover {
     background-color: #CBE4F0;
 }
@@ -751,6 +770,13 @@
     top: 5px;
     right: 5px;
     bottom: 5px;
+}
+
+#pv-linkout {
+    background: url('../images/goout.gif') center center no-repeat;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
 }
 
 /*!
