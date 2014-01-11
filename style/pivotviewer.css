@@ -1,6 +1,6 @@
-﻿a {
-    font-weight: normal;
-}
+﻿/*
+ * PivotViewer Stylesheet 
+ */
 
 .pv-wrapper {
     border: 1px solid #D3D4D4;
@@ -11,6 +11,16 @@
     -webkit-tap-highlight-color: #000000;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
     position: relative;
+}
+
+/* reset the styles for the control */
+.pv-wrapper h1, .pv-wrapper h2, .pv-wrapper h3, .pv-wrapper h4, .pv-wrapper h5, .pv-wrapper h6,
+.pv-wrapper input, .pv-wrapper button, .pv-wrapper select, .pv-wrapper textarea, 
+.pv-wrapper a, .pv-wrapper a:focus,.pv-wrapper a:active, .pv-wrapper a:hover 
+.pv-wrapper span, .pv-wrapper div {
+    font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
+    font-size: 8pt;
+    font-weight: normal;
 }
 
 .pv-loading {
@@ -602,34 +612,34 @@
     margin-top: 8px;
 }
 
-.detail-dark {
+.pv-infopanel-detail.detail-dark {
     background-color: #E0E1E2;
 }
 
-.detail-light {
+.pv-infopanel-detail.detail-light {
     background-color: #EEEFF0;
 }
 
-.detail-item-title {
+.pv-infopanel-detail .detail-item-title {
     color: #05314A;
     margin-bottom: 5px;
 }
 
-.detail-item-value {
+.pv-infopanel-detail .detail-item-value {
     color: #484848;
     padding: 2px 0px 2px 0px;
 }
 
-.detail-item-value-filter {
+.pv-infopanel-detail .detail-item-value-filter {
     color: #36A3D8;
     cursor: default;
 }
 
-    .detail-item-value-filter:hover {
+    .pv-infopanel-detail .detail-item-value-filter:hover {
         background-color: #C9DFEA;
     }
 
-.detail-item-link {
+.pv-infopanel-detail .detail-item-link {
     color: #36A3D8;
     text-decoration: none;
 }
@@ -787,7 +797,7 @@
  * Released under the MIT license.
  * http://jquery.org/license
  */
-.ui-tooltip {
+.pv-tooltip.ui-tooltip {
     padding: 4px 8px;
     position: absolute;
     z-index: 9999;
@@ -812,23 +822,23 @@
  */
 /* Component containers
 ----------------------------------*/
-.ui-widget-content {
+.pv-wrapper .ui-widget-content {
     background: #ffffff /*{bgColorContent}*/ 50% /*{bgContentXPos}*/ 50% /*{bgContentYPos}*/ repeat-x /*{bgContentRepeat}*/;
     color: #222222 /*{fcContent}*/;
 }
 
-    .ui-widget-content a {
+    .pv-wrapper .ui-widget-content a {
         color: #222222 /*{fcContent}*/;
     }
 
-.ui-widget-header {
+.pv-wrapper .ui-widget-header {
     border: 1px solid #aaaaaa /*{borderColorHeader}*/;
     background: #cccccc /*{bgColorHeader}*/ 50% /*{bgHeaderXPos}*/ 50% /*{bgHeaderYPos}*/ repeat-x /*{bgHeaderRepeat}*/;
     color: #222222 /*{fcHeader}*/;
     font-weight: bold;
 }
 
-    .ui-widget-header a {
+    .pv-wrapper .ui-widget-header a {
         color: #222222 /*{fcHeader}*/;
     }
 /*
@@ -841,10 +851,10 @@
  * http://docs.jquery.com/UI/Accordion#theming
  */
 /* IE/Win - Fix animation bug - #4615 */
-.ui-accordion {
+.pv-wrapper .ui-accordion {
 }
 
-    .ui-accordion .ui-accordion-header {
+    .pv-wrapper .ui-accordion .ui-accordion-header {
         outline: none;
         cursor: pointer;
         position: relative;
@@ -854,15 +864,15 @@
         border-top: 1px solid #E2E2E2;
     }
 
-    .ui-accordion .ui-accordion-li-fix {
+    .pv-wrapper .ui-accordion .ui-accordion-li-fix {
         display: inline;
     }
 
-    .ui-accordion .ui-accordion-header-active {
+    .pv-wrapper .ui-accordion .ui-accordion-header-active {
         border-bottom: 0 !important;
     }
 
-    .ui-accordion .ui-accordion-header a {
+    .pv-wrapper .ui-accordion .ui-accordion-header a {
         text-decoration: none;
         color: #05314A;
         width: 80%;
@@ -877,7 +887,7 @@
         font-weight: normal;
     }
 
-.ui-accordion-header.ui-state-default a {
+.pv-wrapper .ui-accordion-header.ui-state-default a {
     text-decoration: none;
     color: #05314A;
     width: 80%;
@@ -889,20 +899,20 @@
     text-overflow: ellipsis;
 }
 
-.ui-accordion-icons .ui-accordion-header a {
+.pv-wrapper .ui-accordion-icons .ui-accordion-header a {
     outline: none;
     text-decoration: none;
     color: #05314A;
 }
 
-.ui-accordion .ui-accordion-header .ui-icon {
+.pv-wrapper .ui-accordion .ui-accordion-header .ui-icon {
     position: absolute;
     left: .5em;
     top: 50%;
     margin-top: -8px;
 }
 
-.ui-accordion .ui-accordion-content {
+.pv-wrapper .ui-accordion .ui-accordion-content {
     padding-bottom: 1em;
     border-top: 0;
     margin-top: -2px;
@@ -914,7 +924,7 @@
     zoom: 1;
 }
 
-.ui-accordion .ui-accordion-content-active {
+.pv-wrapper .ui-accordion .ui-accordion-content-active {
     display: block;
 }
 /*
@@ -926,12 +936,12 @@
  *
  * http://docs.jquery.com/UI/Slider#theming
  */
-.ui-slider {
+.pv-wrapper .ui-slider {
     position: relative;
     text-align: left;
 }
 
-    .ui-slider .ui-slider-handle {
+    .pv-wrapper .ui-slider .ui-slider-handle {
         position: absolute;
         z-index: 2;
         width: 1.2em;
@@ -939,7 +949,7 @@
         cursor: default;
     }
 
-    .ui-slider .ui-slider-range {
+    .pv-wrapper .ui-slider .ui-slider-range {
         position: absolute;
         z-index: 1;
         font-size: .7em;
@@ -948,53 +958,55 @@
         background-position: 0 0;
     }
 
-.ui-slider-horizontal {
+.pv-wrapper .ui-slider-horizontal {
     height: .8em;
 }
 
-    .ui-slider-horizontal .ui-slider-handle {
+    .pv-wrapper .ui-slider-horizontal .ui-slider-handle {
         top: -.3em;
         margin-left: -.6em;
     }
 
-    .ui-slider-horizontal .ui-slider-range {
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range {
         top: 0;
         height: 100%;
     }
 
-    .ui-slider-horizontal .ui-slider-range-min {
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range-min {
         left: 0;
     }
 
-    .ui-slider-horizontal .ui-slider-range-max {
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range-max {
         right: 0;
     }
 
-.ui-slider-vertical {
+.pv-wrapper .ui-slider-vertical {
     width: .8em;
     height: 100px;
 }
 
-    .ui-slider-vertical .ui-slider-handle {
+    .pv-wrapper .ui-slider-vertical .ui-slider-handle {
         left: -.3em;
         margin-left: 0;
         margin-bottom: -.6em;
     }
 
-    .ui-slider-vertical .ui-slider-range {
+    .pv-wrapper .ui-slider-vertical .ui-slider-range {
         left: 0;
         width: 100%;
     }
 
-    .ui-slider-vertical .ui-slider-range-min {
+    .pv-wrapper .ui-slider-vertical .ui-slider-range-min {
         bottom: 0;
     }
 
-    .ui-slider-vertical .ui-slider-range-max {
+    .pv-wrapper .ui-slider-vertical .ui-slider-range-max {
         top: 0;
     }
 
-a .ui-slider-handle .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+.pv-wrapper a .ui-slider-handle .ui-state-default, 
+.pv-wrapper .ui-widget-content .ui-state-default, 
+.pv-wrapper .ui-widget-header .ui-state-default {
     border: 1px solid #d3d3d3 /*{borderColorDefault}*/;
     background: #e6e6e6 /*{bgColorDefault}*/ 50% /*{bgDefaultXPos}*/ 50% /*{bgDefaultYPos}*/ repeat-x /*{bgDefaultRepeat}*/;
     color: #555555 /*{fcDefault}*/;

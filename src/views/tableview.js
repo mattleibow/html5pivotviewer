@@ -342,7 +342,7 @@ PivotViewer.Views.TableView = PivotViewer.Views.IPivotViewerView.subClass({
 
             if (that.displayOptions.AdvancedTooltips) {
                 // create nice tooltips after adding the items
-                table.tooltip({ position: { my: "center bottom", at: "center top" } });
+                table.tooltip({ position: { my: "center bottom", at: "center top" }, tooltipClass: "pv-tooltip" });
             }
 
             // Table view events
