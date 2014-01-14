@@ -1,4 +1,204 @@
-﻿/*
+﻿
+/*!
+ * jQuery UI Tooltip 1.10.3
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ */
+.pv-tooltip.ui-tooltip {
+    padding: 4px 8px;
+    position: absolute;
+    z-index: 9999;
+    max-width: 300px;
+    -webkit-box-shadow: 0 0 14px #aaa;
+    box-shadow: 0 0 14px #aaa;
+    font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
+    font-size: 12px;
+    border-width: 2px;
+}
+
+/*
+ * jQuery UI CSS Framework 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Theming/API
+ *
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/
+ */
+/* Component containers
+----------------------------------*/
+.pv-wrapper .ui-widget-content {
+    background: #ffffff /*{bgColorContent}*/ 50% /*{bgContentXPos}*/ 50% /*{bgContentYPos}*/ repeat-x /*{bgContentRepeat}*/;
+    color: #222222 /*{fcContent}*/;
+}
+
+    .pv-wrapper .ui-widget-content a {
+        color: #222222 /*{fcContent}*/;
+    }
+
+.pv-wrapper .ui-widget-header {
+    border: 1px solid #aaaaaa /*{borderColorHeader}*/;
+    background: #cccccc /*{bgColorHeader}*/ 50% /*{bgHeaderXPos}*/ 50% /*{bgHeaderYPos}*/ repeat-x /*{bgHeaderRepeat}*/;
+    color: #222222 /*{fcHeader}*/;
+    font-weight: bold;
+}
+
+    .pv-wrapper .ui-widget-header a {
+        color: #222222 /*{fcHeader}*/;
+    }
+/*
+ * jQuery UI Accordion 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Accordion#theming
+ */
+/* IE/Win - Fix animation bug - #4615 */
+.pv-wrapper .ui-accordion {
+}
+
+    .pv-wrapper .ui-accordion .ui-accordion-header {
+        outline: none;
+        cursor: pointer;
+        position: relative;
+        margin-top: 1px;
+        margin-bottom: 0px;
+        zoom: 1;
+        border-top: 1px solid #E2E2E2;
+    }
+
+    .pv-wrapper .ui-accordion .ui-accordion-li-fix {
+        display: inline;
+    }
+
+    .pv-wrapper .ui-accordion .ui-accordion-header-active {
+        border-bottom: 0 !important;
+    }
+
+    .pv-wrapper .ui-accordion .ui-accordion-header a {
+        text-decoration: none;
+        color: #05314A;
+        width: 80%;
+        display: block;
+        font-size: 1em;
+        padding: .5em .5em .5em .7em;
+        overflow: hidden;
+        -moz-text-overflow: ellipsis;
+        -ms-text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        font-weight: normal;
+    }
+
+.pv-wrapper .ui-accordion-header.ui-state-default a {
+    text-decoration: none;
+    color: #05314A;
+    width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    -moz-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}
+
+.pv-wrapper .ui-accordion-icons .ui-accordion-header a {
+    outline: none;
+    text-decoration: none;
+    color: #05314A;
+}
+
+.pv-wrapper .ui-accordion .ui-accordion-header .ui-icon {
+    position: absolute;
+    left: .5em;
+    top: 50%;
+    margin-top: -8px;
+}
+
+.pv-wrapper .ui-accordion .ui-accordion-content {
+    padding-bottom: 1em;
+    border-top: 0;
+    margin-top: -2px;
+    position: relative;
+    top: 1px;
+    margin-bottom: 2px;
+    overflow: hidden !important;
+    display: none;
+    zoom: 1;
+}
+
+.pv-wrapper .ui-accordion .ui-accordion-content-active {
+    display: block;
+}
+/*
+ * jQuery UI Slider 1.8.16
+ *
+ * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * http://docs.jquery.com/UI/Slider#theming
+ */
+.pv-wrapper .ui-slider {
+    position: relative;
+    text-align: left;
+}
+
+    .pv-wrapper .ui-slider .ui-slider-handle {
+        position: absolute;
+        z-index: 2;
+        width: 10px;
+        height: 14px;
+        cursor: default;
+    }
+
+    .pv-wrapper .ui-slider .ui-slider-range {
+        position: absolute;
+        z-index: 1;
+        font-size: .7em;
+        display: block;
+        border: 0;
+        background-position: 0 0;
+    }
+
+.pv-wrapper .ui-slider-horizontal {
+    height: 8px;
+}
+
+    .pv-wrapper .ui-slider-horizontal .ui-slider-handle {
+        top: -3px;
+        margin-left: -5px;
+    }
+
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range {
+        top: 0;
+        height: 100%;
+    }
+
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range-min {
+        left: 0;
+    }
+
+    .pv-wrapper .ui-slider-horizontal .ui-slider-range-max {
+        right: 0;
+    }
+
+.pv-wrapper a .ui-slider-handle .ui-state-default, 
+.pv-wrapper .ui-widget-content .ui-state-default, 
+.pv-wrapper .ui-widget-header .ui-state-default {
+    border: 1px solid #d3d3d3 /*{borderColorDefault}*/;
+    background: #e6e6e6 /*{bgColorDefault}*/ 50% /*{bgDefaultXPos}*/ 50% /*{bgDefaultYPos}*/ repeat-x /*{bgDefaultRepeat}*/;
+    color: #555555 /*{fcDefault}*/;
+}
+
+/*
  * PivotViewer Stylesheet 
  */
 
@@ -47,7 +247,7 @@
     }
 
 .pv-toolbarpanel {
-    height: 30px;
+    height: 32px;
     width: 100%;
     border-bottom: 1px solid #D3D4D4;
     padding: 3px 0px;
@@ -119,8 +319,16 @@
 }
 
 .pv-toolbarpanel-zoomslider {
-    margin: 6px 10px 0px 10px;
+    margin: 0px 8px;
 }
+    .pv-toolbarpanel-zoomslider.ui-slider-horizontal {
+        height: 100%;
+    }
+        .pv-toolbarpanel-zoomslider.ui-slider-horizontal .ui-slider-handle {
+            top: 3px;
+            bottom: 3px;
+            height: auto;
+        }
 
 .pv-toolbarpanel-viewcontrols {
     height: 100%;
@@ -789,238 +997,14 @@
     height: 10px;
 }
 
-/*!
- * jQuery UI Tooltip 1.10.3
- * http://jqueryui.com
- *
- * Copyright 2013 jQuery Foundation and other contributors
- * Released under the MIT license.
- * http://jquery.org/license
- */
-.pv-tooltip.ui-tooltip {
-    padding: 4px 8px;
-    position: absolute;
-    z-index: 9999;
-    max-width: 300px;
-    -webkit-box-shadow: 0 0 14px #aaa;
-    box-shadow: 0 0 14px #aaa;
-    font-family: 'Segoe UI', Tahoma, Arial, Helvetica, Sans-Serif;
-    font-size: 12px;
-    border-width: 2px;
-}
-
-/*
- * jQuery UI CSS Framework 1.8.16
- *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Theming/API
- *
- * To view and modify this theme, visit http://jqueryui.com/themeroller/
- */
-/* Component containers
-----------------------------------*/
-.pv-wrapper .ui-widget-content {
-    background: #ffffff /*{bgColorContent}*/ 50% /*{bgContentXPos}*/ 50% /*{bgContentYPos}*/ repeat-x /*{bgContentRepeat}*/;
-    color: #222222 /*{fcContent}*/;
-}
-
-    .pv-wrapper .ui-widget-content a {
-        color: #222222 /*{fcContent}*/;
-    }
-
-.pv-wrapper .ui-widget-header {
-    border: 1px solid #aaaaaa /*{borderColorHeader}*/;
-    background: #cccccc /*{bgColorHeader}*/ 50% /*{bgHeaderXPos}*/ 50% /*{bgHeaderYPos}*/ repeat-x /*{bgHeaderRepeat}*/;
-    color: #222222 /*{fcHeader}*/;
-    font-weight: bold;
-}
-
-    .pv-wrapper .ui-widget-header a {
-        color: #222222 /*{fcHeader}*/;
-    }
-/*
- * jQuery UI Accordion 1.8.16
- *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Accordion#theming
- */
-/* IE/Win - Fix animation bug - #4615 */
-.pv-wrapper .ui-accordion {
-}
-
-    .pv-wrapper .ui-accordion .ui-accordion-header {
-        outline: none;
-        cursor: pointer;
-        position: relative;
-        margin-top: 1px;
-        margin-bottom: 0px;
-        zoom: 1;
-        border-top: 1px solid #E2E2E2;
-    }
-
-    .pv-wrapper .ui-accordion .ui-accordion-li-fix {
-        display: inline;
-    }
-
-    .pv-wrapper .ui-accordion .ui-accordion-header-active {
-        border-bottom: 0 !important;
-    }
-
-    .pv-wrapper .ui-accordion .ui-accordion-header a {
-        text-decoration: none;
-        color: #05314A;
-        width: 80%;
-        display: block;
-        font-size: 1em;
-        padding: .5em .5em .5em .7em;
-        overflow: hidden;
-        -moz-text-overflow: ellipsis;
-        -ms-text-overflow: ellipsis;
-        -o-text-overflow: ellipsis;
-        text-overflow: ellipsis;
-        font-weight: normal;
-    }
-
-.pv-wrapper .ui-accordion-header.ui-state-default a {
-    text-decoration: none;
-    color: #05314A;
-    width: 80%;
-    white-space: nowrap;
-    overflow: hidden;
-    -moz-text-overflow: ellipsis;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-}
-
-.pv-wrapper .ui-accordion-icons .ui-accordion-header a {
-    outline: none;
-    text-decoration: none;
-    color: #05314A;
-}
-
-.pv-wrapper .ui-accordion .ui-accordion-header .ui-icon {
-    position: absolute;
-    left: .5em;
-    top: 50%;
-    margin-top: -8px;
-}
-
-.pv-wrapper .ui-accordion .ui-accordion-content {
-    padding-bottom: 1em;
-    border-top: 0;
-    margin-top: -2px;
-    position: relative;
-    top: 1px;
-    margin-bottom: 2px;
-    overflow: hidden !important;
-    display: none;
-    zoom: 1;
-}
-
-.pv-wrapper .ui-accordion .ui-accordion-content-active {
-    display: block;
-}
-/*
- * jQuery UI Slider 1.8.16
- *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
- * Dual licensed under the MIT or GPL Version 2 licenses.
- * http://jquery.org/license
- *
- * http://docs.jquery.com/UI/Slider#theming
- */
-.pv-wrapper .ui-slider {
-    position: relative;
-    text-align: left;
-}
-
-    .pv-wrapper .ui-slider .ui-slider-handle {
-        position: absolute;
-        z-index: 2;
-        width: 1.2em;
-        height: 1.2em;
-        cursor: default;
-    }
-
-    .pv-wrapper .ui-slider .ui-slider-range {
-        position: absolute;
-        z-index: 1;
-        font-size: .7em;
-        display: block;
-        border: 0;
-        background-position: 0 0;
-    }
-
-.pv-wrapper .ui-slider-horizontal {
-    height: .8em;
-}
-
-    .pv-wrapper .ui-slider-horizontal .ui-slider-handle {
-        top: -.3em;
-        margin-left: -.6em;
-    }
-
-    .pv-wrapper .ui-slider-horizontal .ui-slider-range {
-        top: 0;
-        height: 100%;
-    }
-
-    .pv-wrapper .ui-slider-horizontal .ui-slider-range-min {
-        left: 0;
-    }
-
-    .pv-wrapper .ui-slider-horizontal .ui-slider-range-max {
-        right: 0;
-    }
-
-.pv-wrapper .ui-slider-vertical {
-    width: .8em;
-    height: 100px;
-}
-
-    .pv-wrapper .ui-slider-vertical .ui-slider-handle {
-        left: -.3em;
-        margin-left: 0;
-        margin-bottom: -.6em;
-    }
-
-    .pv-wrapper .ui-slider-vertical .ui-slider-range {
-        left: 0;
-        width: 100%;
-    }
-
-    .pv-wrapper .ui-slider-vertical .ui-slider-range-min {
-        bottom: 0;
-    }
-
-    .pv-wrapper .ui-slider-vertical .ui-slider-range-max {
-        top: 0;
-    }
-
-.pv-wrapper a .ui-slider-handle .ui-state-default, 
-.pv-wrapper .ui-widget-content .ui-state-default, 
-.pv-wrapper .ui-widget-header .ui-state-default {
-    border: 1px solid #d3d3d3 /*{borderColorDefault}*/;
-    background: #e6e6e6 /*{bgColorDefault}*/ 50% /*{bgDefaultXPos}*/ 50% /*{bgDefaultYPos}*/ repeat-x /*{bgDefaultRepeat}*/;
-    color: #555555 /*{fcDefault}*/;
-}
-
 .pv-filterpanel-numericslider {
-    margin: 2px 0px 2px 0px;
-    width: 155px;
+    margin: 3px 5px 3px 5px;
 }
 
 .pv-filterpanel-numericslider-range-val {
     font-style: italic;
     color: #9C9C9C;
-    height: 13px;
+    display: block;
 }
 
 .pv-filterpanel-numericslider-range-max {
@@ -1029,6 +1013,7 @@
 /* Histogram */
 .pv-filterpanel-accordion-facet-chart {
     margin-top: 2px;
+    margin-left: 5px;
 }
 
     .pv-filterpanel-accordion-facet-chart rect {
